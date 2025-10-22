@@ -1,8 +1,16 @@
 class World {    
 shark = new Shark();
+enemies =  [
+    new Enemies(),
+    new Enemies(),
+    new Enemies()
+]
 backgroundObjects = [
-    new BackgroundObject('img/3. Background/Layers/5. Water/D1.png'),
-    new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D1.png')
+    new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 480, 0),    
+    new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 400, 80),
+    new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 400, 80),
+    new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 480, 0),
+    new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D1.png', 400, 80)
 ];
 canvas;
 ctx;
@@ -21,6 +29,10 @@ ctx;
         });
         
         this.ctx.drawImage(this.shark.img, this.shark.x, this.shark.y, this.shark.width, this.shark.height);
+
+        this.enemies.forEach(enemy => {
+            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+        });
 
         let self = this;
         requestAnimationFrame(() => {
