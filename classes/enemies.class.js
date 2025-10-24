@@ -18,7 +18,8 @@ class Enemies extends MovableObject {
 
     loadImages(arr) {
 
-        setInterval(() => {            
+        setInterval(() => {          
+            this.x -= 5;  
             this.img = new Image();
             this.img.src = arr[this.imgCounter];
             this.imgCounter++;
