@@ -14,3 +14,15 @@ class MovableObject {
 
     
 }
+
+/* video
+class MovableObject {
+    x;
+    y;
+    height;
+
+    moveRight() {
+    
+    }
+}
+    */
