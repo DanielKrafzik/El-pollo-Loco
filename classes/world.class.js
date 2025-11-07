@@ -1,3 +1,5 @@
+/* self created 
+
 class World {    
 shark = new Shark();
 enemies =  [
@@ -74,9 +76,9 @@ camera_x = 0;
             self.draw();
         });
     }
-}
+}  */
 
-/* video
+// video
 class World {
     shark = new Shark();
     enemies = [
@@ -84,6 +86,34 @@ class World {
         new Enemies(),
         new Enemies()
     ];
+    backgroundObjects = [
+        new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0),    
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+        new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D1.png', 0),
+        /*new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 0),
+        new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 80),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 80),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+        new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D1.png', 80),
+        new BackgroundObject('img/3. Background/Layers/5. Water/D2.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/1. Light/2.png', 0),
+        new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D2.png', 80),
+        new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0),
+        new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 80),
+        new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 80),
+        new BackgroundObject('img/3. Background/Layers/1. Light/1.png', 0),
+        new BackgroundObject('img/3. Background/Legacy/Layers/2. Floor/D1.png', 80)*/
+    ];
+    canvas;
     ctx;
 
     constructor(canvas) {
@@ -95,15 +125,25 @@ class World {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.drawImage(this.shark.img, this.shark.x, this.shark.y, this.shark.width, this.shark.height);
-        this.enemies.forEach(enemy => {
-            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
-        });
+        
+        this.addObjectsToMap(this.backgroundObjects);
+        this.addToMap(this.shark);
+        this.addObjectsToMap(this.enemies);
 
         let self = this;
         requestAnimationFrame(() => {
             self.draw();
         });
     }
-}    
-    */
+
+    addObjectsToMap(objects) {
+        objects.forEach(obj => {
+            this.addToMap(obj);
+        });
+    }
+
+    addToMap(mo) {
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
+    }
+}
+    

@@ -1,3 +1,4 @@
+/* self created
 class Enemies extends MovableObject {
 
     IMAGES_SWIMMING = [
@@ -28,12 +29,18 @@ class Enemies extends MovableObject {
             }
         }, 100);
     }
-}
+}*/
 
-/* video
+//video
 class Enemies extends MovableObject {
+    y = 360;
+    height = 60;
+    width = 80;
+
     constructor() {
         super().loadImage('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png');
+
+        this.x = 200 + Math.random() * 500;
     }
 }
-    */
+    

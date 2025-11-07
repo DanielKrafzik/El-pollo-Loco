@@ -1,3 +1,4 @@
+/* self created
 let canvas;
 let world;
 let keyboard = new Keyboard();
@@ -41,9 +42,9 @@ document.addEventListener(('keyup'), (event) => {
     if (event.key === ' ') {
         world.keyboard.SPACE = false;
     }
-});
+}); */
 
-/* video
+// video
 let canvas;
 let world;
 
@@ -52,4 +53,4 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas);
 }
-    */
+    
