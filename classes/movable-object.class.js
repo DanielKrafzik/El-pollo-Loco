@@ -17,11 +17,23 @@ class MovableObject {
 
 /* video
 class MovableObject {
-    x;
-    y;
-    height;
+    x = 120;
+    y  = 400;
+    img;
+    height  = 100;
+    width = 150;
+
+
+    loadImage(src) {
+        this.img = new Image();
+        this.img.src = src;
+    }
 
     moveRight() {
+    
+    }
+
+    moveLeft() {
     
     }
 }

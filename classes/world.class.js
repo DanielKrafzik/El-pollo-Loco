@@ -75,3 +75,35 @@ camera_x = 0;
         });
     }
 }
+
+/* video
+class World {
+    shark = new Shark();
+    enemies = [
+        new Enemies(),
+        new Enemies(),
+        new Enemies()
+    ];
+    ctx;
+
+    constructor(canvas) {
+        this.ctx = canvas.getContext('2d');
+        this.canvas = canvas;
+        this.draw();
+    }
+
+    draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.ctx.drawImage(this.shark.img, this.shark.x, this.shark.y, this.shark.width, this.shark.height);
+        this.enemies.forEach(enemy => {
+            this.ctx.drawImage(enemy.img, enemy.x, enemy.y, enemy.width, enemy.height);
+        });
+
+        let self = this;
+        requestAnimationFrame(() => {
+            self.draw();
+        });
+    }
+}    
+    */
