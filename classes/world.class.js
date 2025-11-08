@@ -127,8 +127,9 @@ class World {
 
         
         this.addObjectsToMap(this.backgroundObjects);
-        this.addToMap(this.shark);
         this.addObjectsToMap(this.enemies);
+        
+        this.addToMap(this.shark);
 
         let self = this;
         requestAnimationFrame(() => {
