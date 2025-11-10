@@ -78,20 +78,21 @@ class Shark extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if(this.world.keyboard.RIGHT){
+            if(this.world.keyboard.RIGHT && this.x < 2700){
                 this.x += this.speed;
                 this.otherDirection = false;
             }
-            if(this.world.keyboard.LEFT){
+            if(this.world.keyboard.LEFT && this.x > 0){
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
-            if(this.world.keyboard.UP){
+            if(this.world.keyboard.UP && this.y > 0){
                 this.y -= this.speed;
             }
-            if(this.world.keyboard.DOWN){
+            if(this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height){
                 this.y += this.speed;
             }
+            this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
         setInterval(() => {
