@@ -96,11 +96,8 @@ class Shark extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
-            if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN){
-                let i = this.currentImage % this.IMAGES_SWIMMING.length;
-                let path = this.IMAGES_SWIMMING[i];
-                this.img = this.imageCache[path];
-                this.currentImage++;            
+            if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN){    
+                this.playAnimation(this.IMAGES_SWIMMING);   
             }
         }, 100);    
     }
