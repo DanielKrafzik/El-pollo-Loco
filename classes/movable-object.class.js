@@ -2,22 +2,8 @@ class MovableObject extends DrawableObject {
     speed = 0.15;
     otherDirection = false;
     energy = 100;
-    lastHit = 0;
+    lastHit = 0;    
 
-
-
-    
-
-    drawFrame(ctx) {
-
-        if(this instanceof Shark || this instanceof Enemies || this instanceof Endboss) {
-        ctx.beginPath();
-        ctx.lineWidth = '2';
-        ctx.strokeStyle = 'orange';
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.stroke();
-        }
-    }
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
