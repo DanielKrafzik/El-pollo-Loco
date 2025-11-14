@@ -6,6 +6,8 @@ class World {
     camera_x = 0;
     keyboard;
     statusBar = new Statusbar();
+    coinBar = new CoinBar();
+    poisonBar = new PoisonBar();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -28,7 +30,7 @@ class World {
                     this.statusBar.setPercentage(this.shark.energy);
                 }
             });
-        }, 1000);
+        }, 200);
     }
 
     draw() {
@@ -39,6 +41,8 @@ class World {
 
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
+        this.addToMap(this.coinBar);
+        this.addToMap(this.poisonBar);
 
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.enemies);
