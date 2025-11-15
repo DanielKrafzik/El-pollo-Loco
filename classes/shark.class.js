@@ -2,6 +2,7 @@ class Shark extends MovableObject {
 
     height = 100;
     y = 155;
+    x = 200;
     speed = 5;
     IMAGES_SWIMMING = [
         'img/1.Sharkie/3.Swim/1.png',
@@ -49,7 +50,7 @@ class Shark extends MovableObject {
                 this.x += this.speed;
                 this.otherDirection = false;
             }
-            if(this.world.keyboard.LEFT && this.x > 0){
+            if(this.world.keyboard.LEFT && this.x > 100){
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
