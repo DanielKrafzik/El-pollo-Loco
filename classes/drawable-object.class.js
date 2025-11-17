@@ -6,6 +6,7 @@ class DrawableObject  {
     y  = 280;
     height  = 100;
     width = 150;
+    coinCount = 0;
 
     loadImage(src) {
         this.img = new Image();

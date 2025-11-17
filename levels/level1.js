@@ -3,7 +3,12 @@ const level1 = new Level(
         new Enemies(),
         new Enemies(),
         new Enemies(),
-        new Endboss()
+        new Endboss(),
+        new Coin(400, 350),
+        new Coin(800, 300),
+        new Coin(1200, 250),
+        new Coin(1600, 500),
+        new Coin(2000, 250)
     ],
     [
         new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0),    

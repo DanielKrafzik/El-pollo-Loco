@@ -6,9 +6,7 @@ class CoinBar extends DrawableObject {
         'img/4. Marcadores/orange/60_  copia 2.png',
         'img/4. Marcadores/orange/80_  copia 2.png',
         'img/4. Marcadores/orange/100_ copia 2.png'
-    ];
-    
-    coinCount = 0;
+    ];    
 
     constructor() {
         super();
