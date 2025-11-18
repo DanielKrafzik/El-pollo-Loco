@@ -30,6 +30,12 @@ class World {
                     this.statusBar.setPercentage(this.shark.energy);
                 }
             });
+            this.level.collectibles.forEach((collectible, index) => {
+                if(this.shark.isColliding(collectible)) {
+                    collectible.collect();
+                    this.level.collectibles.splice(index, 1);
+                }
+            });
         }, 200);
     }
 
@@ -46,6 +52,7 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.collectibles);
         
         this.addToMap(this.shark);
 

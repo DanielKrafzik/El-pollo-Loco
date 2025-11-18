@@ -3,11 +3,13 @@ const level1 = new Level(
         new Enemies(),
         new Enemies(),
         new Enemies(),
-        new Endboss(),
+        new Endboss()
+    ],
+    [        
         new Coin(400, 350),
         new Coin(800, 300),
-        new Coin(1200, 250),
-        new Coin(1600, 500),
+        new Coin(1200, 100),
+        new Coin(1600, 400),
         new Coin(2000, 250)
     ],
     [

@@ -35,4 +35,10 @@ class DrawableObject  {
             this.imageCache[src] = img;
         });
     }
+
+    collect() {
+        this.coinCount++;
+        console.log(this.coinCount);
+        
+    }
 }
