@@ -1,7 +1,7 @@
 class CoinBar extends DrawableObject {
     IMAGES_COINS = [
         'img/4. Marcadores/orange/0_  copia 2.png',
-        'img/4. Marcadores/orange/20_ copia 2.png',
+        'img/4. Marcadores/orange/20_  copia.png',
         'img/4. Marcadores/orange/40_  copia 2.png',
         'img/4. Marcadores/orange/60_  copia 2.png',
         'img/4. Marcadores/orange/80_  copia 2.png',
@@ -16,5 +16,10 @@ class CoinBar extends DrawableObject {
         this.y = 40;
         this.width = 200;
         this.height = 60;
+        this.setBarProgress(this.coinCount);
+    }
+
+    setBarProgress(counter) {
+        this.img = this.imageCache[this.IMAGES_COINS[counter]];
     }
 }

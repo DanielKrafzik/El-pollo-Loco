@@ -13,6 +13,13 @@ const level1 = new Level(
         new Coin(2000, 250)
     ],
     [
+        new Poison(600, 350),
+        new Poison(1000, 300),
+        new Poison(1400, 150),
+        new Poison(1800, 400),
+        new Poison(2200, 250)
+    ],
+    [
         new BackgroundObject('img/3. Background/Layers/5. Water/D1.png', 0),    
         new BackgroundObject('img/3. Background/Layers/4.Fondo 2/D1.png', 0),
         new BackgroundObject('img/3. Background/Layers/3.Fondo 1/D1.png', 0),

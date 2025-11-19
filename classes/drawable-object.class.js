@@ -7,6 +7,7 @@ class DrawableObject  {
     height  = 100;
     width = 150;
     coinCount = 0;
+    poisonCount = 0;
 
     loadImage(src) {
         this.img = new Image();
@@ -35,10 +36,13 @@ class DrawableObject  {
             this.imageCache[src] = img;
         });
     }
-
+    
     collect() {
-        this.coinCount++;
-        console.log(this.coinCount);
-        
+        this.coinCount++;      
     }
+
+    collectPoison() {
+        this.poisonCount++;      
+    }
+
 }

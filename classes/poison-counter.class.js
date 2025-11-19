@@ -8,8 +8,6 @@ class PoisonBar extends DrawableObject {
         'img/4. Marcadores/orange/100_ copia.png'
     ];
     
-    poisonCount = 0;
-
     constructor() {
         super();
         this.loadImage(this.IMAGES_POISON[this.poisonCount]);
@@ -18,5 +16,8 @@ class PoisonBar extends DrawableObject {
         this.y = 80;
         this.width = 200;
         this.height = 60;
+    }
+    setBarProgress(counter) {
+        this.img = this.imageCache[this.IMAGES_POISON[counter]];
     }
 }
