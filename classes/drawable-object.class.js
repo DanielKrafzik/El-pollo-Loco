@@ -20,7 +20,7 @@ class DrawableObject  {
     
     drawFrame(ctx) {
 
-        if(this instanceof Shark || this instanceof Enemies || this instanceof Endboss) {
+        if(this instanceof Shark || this instanceof Enemies || this instanceof Endboss || this instanceof Poison || this instanceof Coin) {
         ctx.beginPath();
         ctx.lineWidth = '2';
         ctx.strokeStyle = 'orange';
