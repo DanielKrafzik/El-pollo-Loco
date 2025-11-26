@@ -3,6 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     energy = 100;
     lastHit = 0;    
+    animationFinished = false;
 
 
     isColliding(mo) {
@@ -37,6 +38,24 @@ class MovableObject extends DrawableObject {
                 let path = arr[i];
                 this.img = this.imageCache[path];
                 this.currentImage++;     
+                
+    }
+
+    playAnimationOnce(arr, endArr) {
+        if (!this.animationFinished) {
+        let i = this.currentImage % arr.length;
+        let path = arr[i];
+        this.img = this.imageCache[path];        
+        this.currentImage++;   
+        if (i === arr.length -1) {
+            this.animationFinished = true;
+        }        
+        } else if (this.animationFinished) {
+            let i = this.currentImage % endArr.length;
+            let path = endArr[i];
+            this.img = this.imageCache[path];        
+            this.currentImage++;   
+        }
     }
 
     moveRight() {
