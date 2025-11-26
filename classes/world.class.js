@@ -43,7 +43,7 @@ class World {
                     this.level.poison.splice(index, 1);
                     this.poisonBar.setBarProgress(this.shark.poisonCount);
                 }
-            });
+            });            
         }, 200);
     }
 
@@ -102,6 +102,6 @@ class World {
         mo.x = mo.x * -1;
         this.ctx.restore();
     }
-
+    
 }
     

@@ -4,6 +4,7 @@ class Shark extends MovableObject {
     y = 155;
     x = 200;
     speed = 5;
+    rotation = 0;
     restCounter = 0;
     IMAGES_WAITING = [
         'img/1.Sharkie/1.IDLE/1.png',
@@ -74,7 +75,27 @@ class Shark extends MovableObject {
         'img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
         'img/1.Sharkie/5.Hurt/1.Poisoned/4.png'
-    ]
+    ];
+    IMAGES_BUBBLES = [
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/op1 (with bubble formation)/8.png'
+    ];
+    IMAGES_POISONBUBBLES = [
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+        'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png'
+    ];
     world;
 
 
@@ -86,6 +107,8 @@ class Shark extends MovableObject {
         this.loadImages(this.IMAGES_SWIMMING);      
         this.loadImages(this.IMAGES_DEAD);  
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_BUBBLES);
+        this.loadImages(this.IMAGES_POISONBUBBLES);
 
         this.animate();
     }
@@ -102,9 +125,14 @@ class Shark extends MovableObject {
             }
             if(this.world.keyboard.UP && this.y > 0){
                 this.y -= this.speed;
+                this.rotation = -0.25;
             }
             if(this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height){
                 this.y += this.speed;
+                this.rotation = 0.25;
+            }
+            if (!this.world.keyboard.UP && !this.world.keyboard.DOWN){
+                this.rotation = 0;
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
@@ -119,13 +147,13 @@ class Shark extends MovableObject {
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {                
                 this.playAnimation(this.IMAGES_SWIMMING);   
                 this.restCounter = 0;                
-            } else if(this.restCounter > 20) {
+            } else if(this.restCounter > 50) {
                 this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
             }
             else {
                 this.playAnimation(this.IMAGES_WAITING);                
             }
-        }, 500);    
+        }, 250);    
     }
         
     jump() {

@@ -15,7 +15,17 @@ class DrawableObject  {
     }
 
     draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+        ctx.save();
+        ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+        ctx.rotate(this.rotation);
+        ctx.drawImage(
+            this.img,
+            -this.width / 2,
+            -this.height / 2,
+            this.width,
+            this.height
+        );
+        ctx.restore();
     }
     
     drawFrame(ctx) {
