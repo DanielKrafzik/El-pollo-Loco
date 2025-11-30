@@ -8,6 +8,7 @@ class World {
     statusBar = new Statusbar();
     coinBar = new CoinBar();
     poisonBar = new PoisonBar();
+    bubbles = [];
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -43,7 +44,15 @@ class World {
                     this.level.poison.splice(index, 1);
                     this.poisonBar.setBarProgress(this.shark.poisonCount);
                 }
-            });            
+            });      
+            this.bubbles.forEach((bubble, bIndex) => {  
+                this.level.enemies.forEach((enemy, eIndex) => {
+                    if(bubble.isColliding(enemy)) {
+                        this.bubbles.splice(bIndex, 1);
+                        this.level.enemies.splice(eIndex, 1);
+                    }    
+                });
+            });
         }, 200);
     }
 
@@ -62,6 +71,7 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.collectibles);
         this.addObjectsToMap(this.level.poison);
+        this.addObjectsToMap(this.bubbles);
         
         this.addToMap(this.shark);
 

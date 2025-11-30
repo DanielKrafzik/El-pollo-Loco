@@ -134,9 +134,6 @@ class Shark extends MovableObject {
             if (!this.world.keyboard.UP && !this.world.keyboard.DOWN){
                 this.rotation = 0;
             }
-            if (this.world.keyboard.E) {
-                this.shootBubble();
-            }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
@@ -169,9 +166,8 @@ class Shark extends MovableObject {
     }
 
     shootBubble() {
-        new Bubble(this.x + 100, this.y + 50, this.otherDirection, this.world.keyboard.SPACE);
-        console.log(this.x);
-        
+        let bubble = new Bubble(this.x + 100, this.y + 50, this.otherDirection, this.world.keyboard.SPACE);
+        this.world.bubbles.push(bubble);        
     }
         
     jump() {
