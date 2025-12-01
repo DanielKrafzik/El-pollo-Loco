@@ -155,18 +155,23 @@ class Shark extends MovableObject {
             }
             if (this.world.keyboard.E) {
                 this.playAnimation(this.IMAGES_BUBBLES);
-                this.shootBubble();
+                this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
                 this.restCounter = 0;
             }
             if (this.world.keyboard.SPACE) {
-                this.playAnimation(this.IMAGES_POISONBUBBLES);
-                this.restCounter = 0;
+                if(this.poisonCount > 0){
+                    this.playAnimation(this.IMAGES_POISONBUBBLES);
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
+                    this.poisonCount--;
+                    this.world.poisonBar.setBarProgress(this.poisonCount);
+                    this.restCounter = 0;
+                }
             }
         }, 250);    
     }
 
-    shootBubble() {
-        let bubble = new Bubble(this.x + 100, this.y + 50, this.otherDirection, this.world.keyboard.SPACE);
+    shootBubble(bubbleImg) {
+        let bubble = new Bubble(this.x + 100, this.y + 50, this.otherDirection, bubbleImg);
         this.world.bubbles.push(bubble);        
     }
         

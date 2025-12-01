@@ -1,14 +1,13 @@
 class Bubble extends MovableObject{
-    constructor(x, y, goingLeft, isPoisonous){
+    constructor(x, y, goingLeft, bubbleImg){
         super();
-        this.loadImage('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+        this.loadImage(bubbleImg);
         this.x = x;
         this.y = y;
         this.width = 30;
         this.height = 30;
         this.speed = 7;
         this.goingLeft = goingLeft;
-        this.isPoisonous = isPoisonous; 
         this.animate();
     }
 
