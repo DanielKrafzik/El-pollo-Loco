@@ -48,8 +48,23 @@ class World {
             this.bubbles.forEach((bubble, bIndex) => {  
                 this.level.enemies.forEach((enemy, eIndex) => {
                     if(bubble.isColliding(enemy)) {
-                        this.bubbles.splice(bIndex, 1);
-                        this.level.enemies.splice(eIndex, 1);
+                        if(!enemy.endboss){
+                            this.bubbles.splice(bIndex, 1);
+                            enemy.energy -= 20;
+                            if(enemy.energy <= 0) {
+                                this.level.enemies.splice(eIndex, 1);
+                            }
+                        } else if (enemy.endboss ) {
+                            this.bubbles.splice(bIndex, 1);
+                                if(bubble.poisonous){
+                                enemy.energy -= 20;
+                                console.log(enemy.energy);
+                                
+                                if(enemy.energy <= 0) {
+                                    this.level.enemies.splice(eIndex, 1);
+                                }
+                            }
+                        }
                     }    
                 });
             });

@@ -8,7 +8,9 @@ class Bubble extends MovableObject{
         this.height = 30;
         this.speed = 7;
         this.goingLeft = goingLeft;
+        this.poisonous = bubbleImg.includes('for whale');
         this.animate();
+        this.bubbleRise();
     }
 
     animate(){
@@ -20,4 +22,6 @@ class Bubble extends MovableObject{
             }
         }, 1000 / 60);
     }
+
+
 }

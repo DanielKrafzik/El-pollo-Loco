@@ -4,6 +4,17 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;    
     animationFinished = false;
+    speedY = 0;
+    acceleration = 0.25;
+    poisonous = false;
+    endboss = false;
+
+    bubbleRise() {
+        setInterval(() => {
+                this.y += this.speedY;
+                this.speedY -= this.acceleration;
+        }, 1000 / 60);
+    }
 
     isColliding(mo) {
         return this.x + this.width > mo.x &&
