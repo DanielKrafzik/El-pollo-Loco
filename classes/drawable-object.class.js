@@ -8,6 +8,12 @@ class DrawableObject  {
     width = 150;
     coinCount = 0;
     poisonCount = 0;
+    offset = {
+        top:0,
+        right:0,
+        bottom:0,
+        left:0
+    };
 
     loadImage(src) {
         this.img = new Image();
@@ -34,7 +40,7 @@ class DrawableObject  {
         ctx.beginPath();
         ctx.lineWidth = '2';
         ctx.strokeStyle = 'orange';
-        ctx.rect(this.x, this.y, this.width, this.height);
+        ctx.rect(this.x + this.offset.left, this.y + this.offset.top, this.width - this.offset.right - this.offset.left, this.height - this.offset.bottom - this.offset.top);
         ctx.stroke();
         }
     }

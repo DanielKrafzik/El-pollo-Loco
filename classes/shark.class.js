@@ -1,11 +1,18 @@
 class Shark extends MovableObject {
 
-    height = 100;
+    height = 200;
+    width = 200;
     y = 155;
     x = 200;
     speed = 5;
     rotation = 0;
     restCounter = 0;
+    offset = {
+        top: 100, 
+        right: 40, 
+        bottom: 50, 
+        left: 40
+    };
     IMAGES_WAITING = [
         'img/1.Sharkie/1.IDLE/1.png',
         'img/1.Sharkie/1.IDLE/2.png',

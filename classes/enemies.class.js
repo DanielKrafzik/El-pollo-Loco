@@ -1,7 +1,7 @@
 class Enemies extends MovableObject {
     y = 360;
-    height = 60;
-    width = 80;
+    height = 100;
+    width = 100;
     energy = 40;
     IMAGES_SWIMMING_PUFFER = [
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
