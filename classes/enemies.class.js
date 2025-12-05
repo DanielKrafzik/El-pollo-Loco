@@ -17,10 +17,18 @@ class Enemies extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Regular damage/Yellow 4.png'
     ];
 
-    constructor(startImage) {
+    constructor(startImage, top, right, bottom, left) {
         super().loadImage(startImage);
+        
+        this.offset = {
+            top: top,
+            right: right,
+            bottom: bottom,
+            left: left
+        };
 
         this.x = 200 + Math.random() * 500;
+        this.y = 50 + Math.random() * 250;
         this.speed = 0.15 + Math.random() * 0.5;
         this.loadImages(this.IMAGES_SWIMMING_PUFFER);  
         this.loadImages(this.IMAGES_SWIMMING_YELLY);

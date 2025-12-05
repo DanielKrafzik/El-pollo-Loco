@@ -79,7 +79,6 @@ class MovableObject extends DrawableObject {
     }
 
     moveUpDown(startY = 20, endY = 360, speed = 1) {
-    this.y = startY;  
     this.direction = 1;
 
     setInterval(() => {
