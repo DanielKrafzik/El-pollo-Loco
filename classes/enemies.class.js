@@ -17,7 +17,7 @@ class Enemies extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Regular damage/Yellow 4.png'
     ];
 
-    constructor(startImage, top, right, bottom, left) {
+    constructor(startImage, top, right, bottom, left, startX) {
         super().loadImage(startImage);
         
         this.offset = {
@@ -27,7 +27,7 @@ class Enemies extends MovableObject {
             left: left
         };
 
-        this.x = 200 + Math.random() * 500;
+        this.x = 300 + Math.random() * 3500;
         this.y = 50 + Math.random() * 250;
         this.speed = 0.15 + Math.random() * 0.5;
         this.loadImages(this.IMAGES_SWIMMING_PUFFER);  

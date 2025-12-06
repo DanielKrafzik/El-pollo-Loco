@@ -24,7 +24,7 @@ class Endboss extends MovableObject {
 
     constructor() {
         super();
-        this.x = 3000;
+        this.x = 3900;
         this.offset = {
             top: 150,
             right: 30,

@@ -122,7 +122,7 @@ class Shark extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if(this.world.keyboard.RIGHT && this.x < 2700){
+            if(this.world.keyboard.RIGHT && this.x < 3700){
                 this.x += this.speed;
                 this.otherDirection = false;
             }
