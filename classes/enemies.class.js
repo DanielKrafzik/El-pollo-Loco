@@ -4,6 +4,8 @@ class Enemies extends MovableObject {
     width = 100;
     energy = 40;
 
+    normalPufferAnimationInterval;
+
     //PUFFER FISH IMAGES
     IMAGES_SWIMMING_PUFFER = [
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
@@ -70,8 +72,8 @@ class Enemies extends MovableObject {
     ];
     IMAGES_DYING_PUFFER = [
         'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 1 (can animate by going up).png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 2 (can animate by going up).png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 3 (can animate by going up).png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 2 (can animate by going down to the floor after the Fin Slap attack).png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/1.Dead 3 (can animate by going down to the floor after the Fin Slap attack).png',
     ];
     IMAGES_DYING_PUFFER2 = [
         'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/2.png',
@@ -134,7 +136,18 @@ class Enemies extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png'
     ];
 
-    constructor(startImage, top, right, bottom, left, startX) {
+    pufferColorAnimations = [
+        this.IMAGES_SWIMMING_PUFFER, 
+        this.IMAGES_SWIMMING_PUFFER2, 
+        this.IMAGES_SWIMMING_PUFFER3
+    ];
+    pufferTransitionAnimations = [
+        this.IMAGES_TRANSITION_PUFFER, 
+        this.IMAGES_TRANSITION_PUFFER2,
+        this.IMAGES_TRANSITION_PUFFER3
+    ];
+
+    constructor(startImage, top, right, bottom, left, currentColor) {
         super().loadImage(startImage);
         
         this.offset = {
@@ -168,21 +181,27 @@ class Enemies extends MovableObject {
         this.loadImages(this.IMAGES_DEAD_YELLY_GREEN);
         this.loadImages(this.IMAGES_DEAD_YELLY_PINK);
         if (startImage.includes('Puffer fish')) {
-            this.animatePuffer();
+            this.animatePuffer(currentColor);           
+            
         } else {
             this.animateJelly();
         }
     }
 
-    animatePuffer() {
+    animatePuffer(currentColor) {
         
         this.moveLeft();
-        setInterval(() => {
-            let i = this.currentImage % this.IMAGES_SWIMMING_PUFFER.length;
-            let path = this.IMAGES_SWIMMING_PUFFER[i];
-            this.img = this.imageCache[path];
-            this.currentImage++;
+        this.normalPufferAnimationInterval = setInterval(() => {    
+                this.normalPufferAnimation(currentColor);   
         }, 1000 / 6);
+    }
+
+    normalPufferAnimation(currentColor) {        
+        let i = this.currentImage % this.pufferColorAnimations[currentColor].length;
+        let path = this.pufferColorAnimations[currentColor][i];
+        this.img = this.imageCache[path];
+        this.currentImage++;     
+        setTimeout(() => clearInterval(this.normalPufferAnimationInterval), 3000);
     }
 
     animateJelly() {
