@@ -3,6 +3,7 @@ class Enemies extends MovableObject {
     height = 100;
     width = 100;
     energy = 40;
+    colorIndex;
 
     //PUFFER FISH IMAGES
     IMAGES_SWIMMING_PUFFER = [
@@ -149,10 +150,16 @@ class Enemies extends MovableObject {
         this.IMAGES_BUBBLESWIM_PUFFER2,
         this.IMAGES_BUBBLESWIM_PUFFER3
     ];
+    dyingPufferAnimations = [
+        this.IMAGES_DYING_PUFFER,
+        this.IMAGES_DYING_PUFFER2,
+        this.IMAGES_DYING_PUFFER3
+    ];
 
     constructor(startImage, top, right, bottom, left, currentColor) {
         super().loadImage(startImage);
         
+        this.colorIndex = currentColor;
         this.offset = {
             top: top,
             right: right,
@@ -192,65 +199,102 @@ class Enemies extends MovableObject {
     }
 
     animatePuffer(currentColor) {
-    this.moveLeft();
+        this.moveLeft();
 
-    // sicherstellen dass alte Intervalle gestoppt sind
-    clearInterval(this.normalPufferAnimationInterval);
-
-    this.currentImage = 0;
-
-    this.normalPufferAnimationInterval = setInterval(() => {
-        this.normalPufferAnimation(currentColor);
-    }, 1000 / 6);
-
-    // nach 3 Sekunden → stoppen + Übergang starten
-    setTimeout(() => {
+        // sicherstellen dass alte Intervalle gestoppt sind
         clearInterval(this.normalPufferAnimationInterval);
-        this.transitionPufferAnimation(currentColor);
-    }, 3000);
-}
+
+        this.currentImage = 0;
+        this.offset.bottom = 30; 
+        this.offset.top = 10;
+
+        this.normalPufferAnimationInterval = setInterval(() => {
+            this.normalPufferAnimation(currentColor);
+        }, 1000 / 6);
+
+        // nach 3 Sekunden → stoppen + Übergang starten
+        setTimeout(() => {
+            clearInterval(this.normalPufferAnimationInterval);
+            this.transitionPufferAnimation(currentColor);
+        }, 3000);
+    }
 
 
-normalPufferAnimation(currentColor) {
-    let frames = this.pufferColorAnimations[currentColor];
-    let i = this.currentImage % frames.length;
-    this.img = this.imageCache[frames[i]];
-    this.currentImage++;
-}
-
-
-transitionPufferAnimation(currentColor) {
-    clearInterval(this.transitionPufferAnimationInterval);
-
-    this.currentImage = 0;
-
-    this.transitionPufferAnimationInterval = setInterval(() => {
-        let frames = this.pufferTransitionAnimations[currentColor];
+    normalPufferAnimation(currentColor) {
+        let frames = this.pufferColorAnimations[currentColor];
         let i = this.currentImage % frames.length;
         this.img = this.imageCache[frames[i]];
         this.currentImage++;
-    }, 1000 / 6);
+    }
 
-    // nach 2 Sekunden → stoppen + neue Animation starten
-    setTimeout(() => {
+
+    transitionPufferAnimation(currentColor) {
         clearInterval(this.transitionPufferAnimationInterval);
-        this.bubbleSwimAnimation(currentColor);
-    }, 2000);
-}
+
+        this.currentImage = 0;
+
+        this.transitionPufferAnimationInterval = setInterval(() => {
+            let frames = this.pufferTransitionAnimations[currentColor];
+            let i = this.currentImage % frames.length;
+            this.img = this.imageCache[frames[i]];
+            this.currentImage++;
+        }, 1000 / 6);
+
+        // nach 2 Sekunden → stoppen + neue Animation starten
+        setTimeout(() => {
+            clearInterval(this.transitionPufferAnimationInterval);
+            this.bubbleSwimAnimation(currentColor);
+        }, 833);
+    }
 
 
-bubbleSwimAnimation(currentColor) {
-    clearInterval(this.bubbleSwimInterval);
+    bubbleSwimAnimation(currentColor) {
+        clearInterval(this.bubbleSwimInterval);
 
-    this.currentImage = 0;
+        this.currentImage = 0;
+        this.offset.bottom = 0; 
+        this.offset.top = 0;
 
-    this.bubbleSwimInterval = setInterval(() => {
-        let frames = this.bubbleSwimAnimations[currentColor];
-        let i = this.currentImage % frames.length;
-        this.img = this.imageCache[frames[i]];
-        this.currentImage++;
-    }, 1000 / 6);
-}
+        this.bubbleSwimInterval = setInterval(() => {
+            let frames = this.bubbleSwimAnimations[currentColor];
+            let i = this.currentImage % frames.length;
+            this.img = this.imageCache[frames[i]];
+            this.currentImage++;
+        }, 1000 / 6);
+
+        setTimeout(() => {
+            clearInterval(this.bubbleSwimInterval);
+            this.transitionPufferAnimationReverse(currentColor);
+        }, 3000);
+    }
+
+    transitionPufferAnimationReverse(currentColor) {
+        clearInterval(this.transitionPufferAnimationReverseInterval);
+
+        this.currentImage = this.pufferTransitionAnimations[currentColor].length - 1;
+        this.transitionPufferAnimationReverseInterval = setInterval(() => {
+            let frames = this.pufferTransitionAnimations[currentColor];
+            let i = this.currentImage % frames.length;
+            this.img = this.imageCache[frames[i]];
+            this.currentImage--;
+        }, 1000 / 6);
+
+        setTimeout(() => {
+            clearInterval(this.transitionPufferAnimationReverseInterval);
+            this.animatePuffer(currentColor);
+        }, 833);
+    }
+
+    dyingPufferAnimation() {
+        clearInterval(this.normalPufferAnimationInterval);
+        clearInterval(this.transitionPufferAnimationInterval);
+        clearInterval(this.bubbleSwimInterval);
+        clearInterval(this.transitionPufferAnimationReverseInterval);
+        this.currentImage = 0;
+
+        let path = this.dyingPufferAnimations[this.colorIndex][0];
+        this.img = this.imageCache[path];
+    }
 
     animateJelly() {
         this.moveUpDown();
