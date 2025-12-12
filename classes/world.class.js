@@ -52,12 +52,12 @@ class World {
                             this.bubbles.splice(bIndex, 1);
                             enemy.energy -= 20;
                             if(enemy.energy <= 0) {
-                                enemy.dyingPufferAnimation(enemy);
                                 clearInterval(enemy.moveLeftInterval);
+                                enemy.dyingPufferAnimation(enemy);
                                 enemy.moveUp();
                                 setTimeout(() => {
                                     this.level.enemies.splice(eIndex, 1);
-                                }, 1000);
+                                }, 3000);
                             }
                         } else if (enemy.endboss ) {
                             this.bubbles.splice(bIndex, 1);

@@ -4,6 +4,7 @@ class Enemies extends MovableObject {
     width = 100;
     energy = 40;
     colorIndex;
+    isDead = false;
 
     //PUFFER FISH IMAGES
     IMAGES_SWIMMING_PUFFER = [
@@ -192,16 +193,15 @@ class Enemies extends MovableObject {
         this.loadImages(this.IMAGES_DEAD_YELLY_PINK);
         if (startImage.includes('Puffer fish')) {
             this.animatePuffer(currentColor);           
-            
+            this.moveLeft();
         } else {
             this.animateJelly();
+            this.moveUpDown();
         }
     }
 
     animatePuffer(currentColor) {
-        this.moveLeft();
-
-        // sicherstellen dass alte Intervalle gestoppt sind
+        if (this.isDead) return;
         clearInterval(this.normalPufferAnimationInterval);
 
         this.currentImage = 0;
@@ -212,7 +212,6 @@ class Enemies extends MovableObject {
             this.normalPufferAnimation(currentColor);
         }, 1000 / 6);
 
-        // nach 3 Sekunden → stoppen + Übergang starten
         setTimeout(() => {
             clearInterval(this.normalPufferAnimationInterval);
             this.transitionPufferAnimation(currentColor);
@@ -221,6 +220,7 @@ class Enemies extends MovableObject {
 
 
     normalPufferAnimation(currentColor) {
+        if (this.isDead) return;
         let frames = this.pufferColorAnimations[currentColor];
         let i = this.currentImage % frames.length;
         this.img = this.imageCache[frames[i]];
@@ -229,6 +229,7 @@ class Enemies extends MovableObject {
 
 
     transitionPufferAnimation(currentColor) {
+        if (this.isDead) return;
         clearInterval(this.transitionPufferAnimationInterval);
 
         this.currentImage = 0;
@@ -240,7 +241,6 @@ class Enemies extends MovableObject {
             this.currentImage++;
         }, 1000 / 6);
 
-        // nach 2 Sekunden → stoppen + neue Animation starten
         setTimeout(() => {
             clearInterval(this.transitionPufferAnimationInterval);
             this.bubbleSwimAnimation(currentColor);
@@ -249,6 +249,7 @@ class Enemies extends MovableObject {
 
 
     bubbleSwimAnimation(currentColor) {
+        if (this.isDead) return;
         clearInterval(this.bubbleSwimInterval);
 
         this.currentImage = 0;
@@ -269,6 +270,7 @@ class Enemies extends MovableObject {
     }
 
     transitionPufferAnimationReverse(currentColor) {
+        if (this.isDead) return;
         clearInterval(this.transitionPufferAnimationReverseInterval);
 
         this.currentImage = this.pufferTransitionAnimations[currentColor].length - 1;
@@ -286,6 +288,7 @@ class Enemies extends MovableObject {
     }
 
     dyingPufferAnimation() {
+        this.isDead = true;
         clearInterval(this.normalPufferAnimationInterval);
         clearInterval(this.transitionPufferAnimationInterval);
         clearInterval(this.bubbleSwimInterval);
@@ -297,7 +300,6 @@ class Enemies extends MovableObject {
     }
 
     animateJelly() {
-        this.moveUpDown();
         setInterval(() => {
             let i = this.currentImage % this.IMAGES_SWIMMING_YELLY.length;
             let path = this.IMAGES_SWIMMING_YELLY[i];
