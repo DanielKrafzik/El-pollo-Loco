@@ -215,7 +215,7 @@ class Enemies extends MovableObject {
         setTimeout(() => {
             clearInterval(this.normalPufferAnimationInterval);
             this.transitionPufferAnimation(currentColor);
-        }, 3000);
+        }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
 
@@ -266,7 +266,7 @@ class Enemies extends MovableObject {
         setTimeout(() => {
             clearInterval(this.bubbleSwimInterval);
             this.transitionPufferAnimationReverse(currentColor);
-        }, 3000);
+        }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
     transitionPufferAnimationReverse(currentColor) {

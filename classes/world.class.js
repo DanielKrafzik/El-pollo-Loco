@@ -52,9 +52,11 @@ class World {
                             this.bubbles.splice(bIndex, 1);
                             enemy.energy -= 20;
                             if(enemy.energy <= 0) {
-                                clearInterval(enemy.moveLeftInterval);
-                                enemy.dyingPufferAnimation(enemy);
-                                enemy.moveUp();
+                                if(enemy.img.currentSrc.includes('Puffer')) {
+                                    clearInterval(enemy.moveLeftInterval);
+                                    enemy.dyingPufferAnimation(enemy);
+                                    enemy.moveUp();
+                                }
                                 setTimeout(() => {
                                     this.level.enemies.splice(eIndex, 1);
                                 }, 3000);
