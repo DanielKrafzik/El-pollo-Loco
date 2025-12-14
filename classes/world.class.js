@@ -55,8 +55,13 @@ class World {
                                 if(enemy.img.currentSrc.includes('Puffer')) {
                                     clearInterval(enemy.moveLeftInterval);
                                     enemy.dyingPufferAnimation(enemy);
-                                    enemy.moveUp();
+                                } else {
+                                    console.log(enemy);
+                                    
+                                    clearInterval(enemy.moveUpDownInterval);
+                                    enemy.animateJellyDying(enemy);                                    
                                 }
+                                enemy.moveUp();
                                 setTimeout(() => {
                                     this.level.enemies.splice(eIndex, 1);
                                 }, 3000);

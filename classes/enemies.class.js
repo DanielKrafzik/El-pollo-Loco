@@ -136,6 +136,7 @@ class Enemies extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png'
     ];
 
+    //Puffer fish animation arrays
     pufferColorAnimations = [
         this.IMAGES_SWIMMING_PUFFER, 
         this.IMAGES_SWIMMING_PUFFER2, 
@@ -155,6 +156,24 @@ class Enemies extends MovableObject {
         this.IMAGES_DYING_PUFFER,
         this.IMAGES_DYING_PUFFER2,
         this.IMAGES_DYING_PUFFER3
+    ];
+
+    //Jelly fish animation arrays
+    jellyColorAnimations = [
+        this.IMAGES_SWIMMING_YELLY,
+        this.IMAGES_SWIMMING_YELLY2
+    ];
+    jellyTransitionAnimations = [
+        this.IMAGES_TRANSITION_YELLY,
+        this.IMAGES_TRANSITION_YELLY2
+    ];
+    jellyDeadAnimations = [
+        this.IMAGES_DEAD_YELLY_YELLOW,
+        this.IMAGES_DEAD_YELLY_LILA,
+    ];
+    jellyTransitionDeadAnimations = [
+        this.IMAGES_DEAD_YELLY_GREEN,
+        this.IMAGES_DEAD_YELLY_PINK
     ];
 
     constructor(startImage, top, right, bottom, left, currentColor) {
@@ -195,11 +214,12 @@ class Enemies extends MovableObject {
             this.animatePuffer(currentColor);           
             this.moveLeft();
         } else {
-            this.animateJelly();
+            this.animateJelly(currentColor);
             this.moveUpDown();
         }
     }
 
+    //PUFFER FISH ANIMATIONS
     animatePuffer(currentColor) {
         if (this.isDead) return;
         clearInterval(this.normalPufferAnimationInterval);
@@ -299,10 +319,57 @@ class Enemies extends MovableObject {
         this.img = this.imageCache[path];
     }
 
-    animateJelly() {
+    //JELLY FISH ANIMATIONS
+    animateJelly(currentColor) {
+        if (this.isDead) return;
+        this.animateJellyInterval = setInterval(() => {
+            let i = this.currentImage % this.jellyColorAnimations[currentColor].length;
+            
+            let path = this.jellyColorAnimations[currentColor][i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }, 1000 / 6);
+
+        setTimeout(() => {
+            clearInterval(this.animateJellyInterval);
+            this.animateJellyTransition(currentColor);
+        }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
+    }
+
+    animateJellyTransition(currentColor) {
+        if (this.isDead) return;
+        this.currentImage = 0;
+
+        this.animateJellyTransitionInterval = setInterval(() => {
+            let i = this.currentImage % this.jellyTransitionAnimations[currentColor].length;
+            let path = this.jellyTransitionAnimations[currentColor][i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }, 1000 / 6);
+
+        setTimeout(() => {
+            clearInterval(this.animateJellyTransitionInterval);
+            this.animateJelly(currentColor);
+        },Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
+    }
+
+    animateJellyDying(enemy) {
+        this.isDead = true;
+        clearInterval(this.animateJellyInterval);
+        clearInterval(this.animateJellyTransitionInterval);
+        this.currentImage = 0;
+
+        let deadImgArray;
+
+        if(enemy.img.currentSrc.includes('Yellow')|| enemy.img.currentSrc.includes('Lila')){
+            deadImgArray = this.jellyDeadAnimations;
+        } else {
+            deadImgArray = this.jellyTransitionDeadAnimations;
+        }
+
         setInterval(() => {
-            let i = this.currentImage % this.IMAGES_SWIMMING_YELLY.length;
-            let path = this.IMAGES_SWIMMING_YELLY[i];
+            let i = this.currentImage % deadImgArray[this.colorIndex].length;
+            let path = deadImgArray[this.colorIndex][i];
             this.img = this.imageCache[path];
             this.currentImage++;
         }, 1000 / 6);
