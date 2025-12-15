@@ -7,6 +7,8 @@ class Shark extends MovableObject {
     speed = 5;
     rotation = 0;
     restCounter = 0;
+    isPlayingBubbleAnimation = false;
+    bubbleAnimationFinished = false;
     offset = {
         top: 100, 
         right: 40, 
@@ -160,11 +162,25 @@ class Shark extends MovableObject {
             else {
                 this.playAnimation(this.IMAGES_WAITING);                
             }
-            if (this.world.keyboard.E) {
+            /*if (this.world.keyboard.E) {
                 this.playAnimation(this.IMAGES_BUBBLES);
                 this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
                 this.restCounter = 0;
+            }*/
+            //
+            if (this.world.keyboard.E && !this.isPlayingBubbleAnimation && !this.bubbleAnimationFinished) {
+                this.playAnimationOneTime(this.IMAGES_BUBBLES);
             }
+
+            // Wenn Animation fertig → Bubble schießen (GENAU EINMAL)
+            if (this.bubbleAnimationFinished) {
+                this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+                this.restCounter = 0;
+
+                // Reset für nächsten Schuss
+                this.bubbleAnimationFinished = false;
+            }
+            //
             if (this.world.keyboard.SPACE) {
                 if(this.poisonCount > 0){
                     this.playAnimation(this.IMAGES_POISONBUBBLES);
@@ -184,6 +200,24 @@ class Shark extends MovableObject {
         
     jump() {
     
+    }
+
+    playAnimationOneTime(arr) {
+        if (this.bubbleAnimationFinished) return;
+
+        this.isPlayingBubbleAnimation = true;
+
+        let i = this.currentImage % arr.length;
+        let path = arr[i];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+
+        // Animation einmal durchgelaufen
+        if (this.currentImage >= arr.length) {
+            this.bubbleAnimationFinished = true;
+            this.isPlayingBubbleAnimation = false;
+            this.currentImage = 0;
+        }
     }
 }
     
