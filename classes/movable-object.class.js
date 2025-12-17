@@ -47,8 +47,7 @@ class MovableObject extends DrawableObject {
                 let i = this.currentImage % arr.length;
                 let path = arr[i];
                 this.img = this.imageCache[path];
-                this.currentImage++;     
-                
+                this.currentImage++;                     
     }
 
     playAnimationOnce(arr, endArr) {
@@ -56,11 +55,11 @@ class MovableObject extends DrawableObject {
             let i = this.currentImage % arr.length;
             let path = arr[i];
             this.img = this.imageCache[path];        
-            this.currentImage++;   
+            this.currentImage++;               
             if (i === arr.length -1) {
                 this.animationFinished = true;
         }        
-        } else if (this.animationFinished) {
+        } else if (this.animationFinished && endArr) {
             let i = this.currentImage % endArr.length;
             let path = endArr[i];
             this.img = this.imageCache[path];        
