@@ -50,16 +50,19 @@ class MovableObject extends DrawableObject {
                 this.currentImage++;                     
     }
 
-    playAnimationOnce(arr, endArr) {
-        if (!this.animationFinished) {
-            let i = this.currentImage % arr.length;
-            let path = arr[i];
-            this.img = this.imageCache[path];        
-            this.currentImage++;               
-            if (i === arr.length -1) {
-                this.animationFinished = true;
-        }        
-        } else if (this.animationFinished && endArr) {
+    playAnimationOnce(arr,endArr) {
+        let i = this.currentImage % arr.length;
+        let path = arr[i];
+
+        if (!this.imageCache[path]) return;
+
+        this.img = this.imageCache[path];
+        this.currentImage++;
+
+        if (this.currentImage >= arr.length) {
+            this.animationFinished = true;
+        }      
+        if (this.animationFinished && endArr) {
             let i = this.currentImage % endArr.length;
             let path = endArr[i];
             this.img = this.imageCache[path];        

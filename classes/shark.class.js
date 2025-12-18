@@ -7,8 +7,7 @@ class Shark extends MovableObject {
     speed = 5;
     rotation = 0;
     restCounter = 0;
-    isPlayingBubbleAnimation = false;
-    bubbleAnimationFinished = true;
+    isBubbleAnimating = false;
     offset = {
         top: 100, 
         right: 40, 
@@ -162,14 +161,10 @@ class Shark extends MovableObject {
             else {
                 this.playAnimation(this.IMAGES_WAITING);                
             }
-            if (this.world.keyboard.E) {
-                this.playAnimationOnce(this.IMAGES_BUBBLES);
-                console.log(this.animationFinished);
-                if(this.animationFinished){
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
-                    this.animationFinished = false;
-                }
-                this.restCounter = 0;
+            if (this.world.keyboard.E && !this.isBubbleAnimating) {
+                this.isBubbleAnimating = true;
+                this.animationFinished = false;
+                this.currentImage = 0;
             }
             if (this.world.keyboard.SPACE) {
                 if(this.poisonCount > 0){
@@ -177,6 +172,16 @@ class Shark extends MovableObject {
                     this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
                     this.poisonCount--;
                     this.world.poisonBar.setBarProgress(this.poisonCount);
+                    this.restCounter = 0;
+                }
+            }
+            if (this.isBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_BUBBLES);
+
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+                    this.isBubbleAnimating = false;
+                    this.animationFinished = false;
                     this.restCounter = 0;
                 }
             }
