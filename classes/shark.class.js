@@ -8,6 +8,7 @@ class Shark extends MovableObject {
     rotation = 0;
     restCounter = 0;
     isBubbleAnimating = false;
+    isPoisonBubbleAnimating = false;
     offset = {
         top: 100, 
         right: 40, 
@@ -166,14 +167,10 @@ class Shark extends MovableObject {
                 this.animationFinished = false;
                 this.currentImage = 0;
             }
-            if (this.world.keyboard.SPACE) {
-                if(this.poisonCount > 0){
-                    this.playAnimation(this.IMAGES_POISONBUBBLES);
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-                    this.poisonCount--;
-                    this.world.poisonBar.setBarProgress(this.poisonCount);
-                    this.restCounter = 0;
-                }
+            if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) {
+                this.isPoisonBubbleAnimating = true;
+                this.animationFinished = false;
+                this.currentImage = 0;
             }
             if (this.isBubbleAnimating) {
                 this.playAnimationOnce(this.IMAGES_BUBBLES);
@@ -185,11 +182,28 @@ class Shark extends MovableObject {
                     this.restCounter = 0;
                 }
             }
+            if (this.isPoisonBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
+
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
+                    this.poisonCount--;
+                    this.world.poisonBar.setBarProgress(this.poisonCount);
+                    this.isPoisonBubbleAnimating = false;
+                    this.animationFinished = false;
+                    this.restCounter = 0;
+                }
+            }
         }, 250);    
     }
 
     shootBubble(bubbleImg) {
-        let bubble = new Bubble(this.x + 100, this.y + 50, this.otherDirection, bubbleImg);
+        let bubble;
+        if (!this.otherDirection){
+        bubble = new Bubble(this.x + 140, this.y + 50, this.otherDirection, bubbleImg);
+        } else {
+        bubble = new Bubble(this.x - 40 , this.y + 50, this.otherDirection, bubbleImg);
+        }        
         this.world.bubbles.push(bubble);        
     }
         
