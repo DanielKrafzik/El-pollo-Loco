@@ -17,6 +17,15 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
+        this.connectWorldToObjects();
+    }
+
+    connectWorldToObjects() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy.setWorld) {
+                enemy.setWorld(this);
+            }
+        });
     }
 
     setWorld() {

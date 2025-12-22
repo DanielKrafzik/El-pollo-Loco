@@ -58,6 +58,7 @@ class Endboss extends MovableObject {
     constructor() {
         super();
         this.x = 3900;
+        this.y = 0;
         this.offset = {
             top: 150,
             right: 30,
@@ -71,11 +72,18 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.animate();  
+        this.world = null;
     }   
+
+    setWorld(world) {
+        this.world = world;
+    }
 
     animate() {
         setInterval(() => {
-        this.playAnimation(this.IMAGES_SWIMMING);
-        }, 200);
+            if(this.world.shark.x >= 3000) {
+                this.playAnimationOnce(this.IMAGES_INTRODUCTION, this.IMAGES_SWIMMING);
+            }
+        }, 200);        
     }
 }
