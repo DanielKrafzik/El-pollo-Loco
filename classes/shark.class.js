@@ -7,6 +7,7 @@ class Shark extends MovableObject {
     speed = 5;
     rotation = 0;
     restCounter = 0;
+    vulnerable = true;
     isBubbleAnimating = false;
     isPoisonBubbleAnimating = false;
     offset = {
@@ -151,7 +152,7 @@ class Shark extends MovableObject {
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
-            } else if(this.isHurt()){ 
+            } else if(this.world.hitTimePassed()){ 
                 this.playAnimation(this.IMAGES_HURT);
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {                
                 this.playAnimation(this.IMAGES_SWIMMING);   

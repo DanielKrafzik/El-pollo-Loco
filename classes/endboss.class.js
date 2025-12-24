@@ -91,16 +91,22 @@ class Endboss extends MovableObject {
                 this.playAnimationOnce(this.IMAGES_INTRODUCTION, this.IMAGES_SWIMMING);
                 this.moveTowardsShark();
             }
-        }, 200);        
+        }, 100);        
     }
 
     moveTowardsShark() {
         const shark = this.world.shark;
 
-        if (shark.x < this.x) this.x -= this.speed;
-        if (shark.x > this.x) this.x += this.speed;
+        if (shark.x < this.x) {
+            this.otherDirection = false;
+            this.x -= this.speed;
+        }
+        if (shark.x > this.x) {
+            this.otherDirection = true;
+            this.x += this.speed;
+        }
 
-        if (shark.y < this.y) this.y -= this.speed * 0.5;
-        if (shark.y > this.y) this.y += this.speed * 0.5;
+        if (shark.y < this.y + 16) this.y -= this.speed * 0.5;
+        if (shark.y > this.y && this.y < 200) this.y += this.speed * 0.5;
     }
 }

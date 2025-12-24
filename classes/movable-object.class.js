@@ -8,6 +8,7 @@ class MovableObject extends DrawableObject {
     acceleration = 0.25;
     poisonous = false;
     endboss = false;
+    timePassed = 0;
 
     bubbleRise() {
         setInterval(() => {
@@ -30,12 +31,6 @@ class MovableObject extends DrawableObject {
         } else {
             this.lastHit = new Date().getTime();
         }
-    }
-
-    isHurt() {
-        let timePassed = new Date().getTime() - this.lastHit;
-        timePassed = timePassed / 1000;
-        return timePassed < 1;
     }
 
     isDead() {

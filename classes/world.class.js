@@ -9,6 +9,7 @@ class World {
     coinBar = new CoinBar();
     poisonBar = new PoisonBar();
     bubbles = [];
+    lastHitTime = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -35,7 +36,7 @@ class World {
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
-                if(this.shark.isColliding(enemy)) {
+                if(this.shark.isColliding(enemy) && this.lastHitTime >= 2) {                    
                     this.shark.hit();
                     this.statusBar.setPercentage(this.shark.energy);
                 }
@@ -147,6 +148,12 @@ class World {
     flipImageBack(mo) {
         mo.x = mo.x * -1;
         this.ctx.restore();
+    }
+
+    hitTimePassed() {
+        this.lastHitTime = new Date().getTime() - this.shark.lastHit;
+        this.lastHitTime = this.lastHitTime / 1000;
+        return this.lastHitTime < 1;
     }
     
 }
