@@ -106,7 +106,7 @@ class Endboss extends MovableObject {
             this.x += this.speed;
         }
 
-        if (shark.y < this.y + 16) this.y -= this.speed * 0.5;
-        if (shark.y > this.y && this.y < 200) this.y += this.speed * 0.5;
+        if (shark.y - 32 < this.y) this.y -= this.speed;
+        if (shark.y > this.y && this.y < 200) this.y += this.speed;
     }
 }
