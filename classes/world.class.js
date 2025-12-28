@@ -66,8 +66,6 @@ class World {
                                     clearInterval(enemy.moveLeftInterval);
                                     enemy.dyingPufferAnimation(enemy);
                                 } else {
-                                    console.log(enemy);
-                                    
                                     clearInterval(enemy.moveUpDownInterval);
                                     enemy.animateJellyDying(enemy);                                    
                                 }
@@ -79,11 +77,14 @@ class World {
                         } else if (enemy.endboss ) {
                             this.bubbles.splice(bIndex, 1);
                                 if(bubble.poisonous){
-                                enemy.energy -= 20;
-                                console.log(enemy.energy);
-                                
+                                    enemy.energy -= 20;
                                 if(enemy.energy <= 0) {
-                                    this.level.enemies.splice(eIndex, 1);
+                                    enemy.speed = 0.5;
+                                    enemy.endbossDyingAnimation();
+                                    enemy.moveUp();
+                                    setTimeout(() => {
+                                        this.level.enemies.splice(eIndex, 1);
+                                    }, 3000);
                                 }
                             }
                         }
