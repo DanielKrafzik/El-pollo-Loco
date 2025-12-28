@@ -94,6 +94,14 @@ class Endboss extends MovableObject {
         }, 100);        
     }
 
+    animateAfterHit() {
+        this.speed = 16;
+        setInterval(() => {
+            this.playAnimation(this.IMAGES_SWIMMING);
+            this.moveTowardsShark();
+        }, 100);
+    }
+
     moveTowardsShark() {
         const shark = this.world.shark;
 
