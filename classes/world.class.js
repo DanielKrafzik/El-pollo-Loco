@@ -78,7 +78,8 @@ class World {
                             this.bubbles.splice(bIndex, 1);
                                 if(bubble.poisonous){
                                     enemy.energy -= 20;
-                                    clearInterval(enemy.endbossSwimmingIntervall);
+                                    clearInterval(enemy.endbossSwimmingInterval);
+                                    clearInterval(enemy.animateAfterHitInterval);
                                     enemy.animateAfterHit();
                                     enemy.playAnimation(enemy.IMAGES_HURT);
                                 if(enemy.energy <= 0) {

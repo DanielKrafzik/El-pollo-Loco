@@ -82,7 +82,7 @@ class Endboss extends MovableObject {
 
     animate() {
         let triggered = false;
-        this.endbossSwimmingIntervall = setInterval(() => {
+        this.endbossSwimmingInterval = setInterval(() => {
             if(this.world.shark.x >= 3000) {
                 
                 triggered = true;
@@ -95,8 +95,7 @@ class Endboss extends MovableObject {
     }
 
     animateAfterHit() {
-        this.speed = 16;
-        setInterval(() => {
+        this.animateAfterHitInterval = setInterval(() => {
             this.playAnimation(this.IMAGES_SWIMMING);
             this.moveTowardsShark();
         }, 100);
