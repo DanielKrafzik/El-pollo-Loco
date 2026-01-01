@@ -59,7 +59,7 @@ class Endboss extends MovableObject {
         super();
         this.x = 3900;
         this.y = 0;
-        this.speed = 16;
+        this.speed = 2.5;
         this.offset = {
             top: 150,
             right: 30,
@@ -88,10 +88,25 @@ class Endboss extends MovableObject {
                 triggered = true;
             }
             if(triggered) {
-                this.playAnimationOnce(this.IMAGES_INTRODUCTION, this.IMAGES_SWIMMING);
+                this.updateAnimation();
                 this.moveTowardsShark();
             }
-        }, 100);        
+        }, 1000 / 60);        
+    }
+
+    updateAnimation() {
+        if (!this.lastAnimTime) this.lastAnimTime = 0;
+
+        const now = Date.now();
+        const ANIM_SPEED = 120;
+
+        if (now - this.lastAnimTime > ANIM_SPEED) {
+            this.playAnimationOnce(
+                this.IMAGES_INTRODUCTION,
+                this.IMAGES_SWIMMING
+            );
+            this.lastAnimTime = now;
+        }
     }
 
     animateAfterHit() {
@@ -112,8 +127,9 @@ class Endboss extends MovableObject {
             this.otherDirection = true;
             this.x += this.speed;
         }
-
-        if (shark.y - 32 < this.y) this.y -= this.speed;
+        console.log("shark:", shark.y, "endboss:", this.y);
+        
+        if (shark.y <= this.y) this.y -= this.speed;
         if (shark.y > this.y && this.y < 200) this.y += this.speed;
     }
 
