@@ -133,7 +133,7 @@ class Shark extends MovableObject {
                 this.x -= this.speed;
                 this.otherDirection = true;
             }
-            if(this.world.keyboard.UP && this.y > 0){
+            if(this.world.keyboard.UP && this.y > -100){
                 this.y -= this.speed;
                 this.rotation = -0.25;
             }

@@ -2,7 +2,7 @@ class Endboss extends MovableObject {
 
     height = 400;
     width = 300;
-    y = 100;
+    y = 0;
     energy = 60;
     endboss = true;
 
@@ -58,10 +58,9 @@ class Endboss extends MovableObject {
     constructor() {
         super();
         this.x = 3900;
-        this.y = 0;
         this.speed = 2.5;
         this.offset = {
-            top: 150,
+            top: 200,
             right: 30,
             bottom: 75,
             left: 30
@@ -118,6 +117,8 @@ class Endboss extends MovableObject {
 
     moveTowardsShark() {
         const shark = this.world.shark;
+        const bossHitboxY = this.y + this.offset.top; 
+        const sharkHitboxY = shark.y + shark.offset.top;
 
         if (shark.x < this.x) {
             this.otherDirection = false;
@@ -127,10 +128,8 @@ class Endboss extends MovableObject {
             this.otherDirection = true;
             this.x += this.speed;
         }
-        console.log("shark:", shark.y, "endboss:", this.y);
-        
-        if (shark.y <= this.y) this.y -= this.speed;
-        if (shark.y > this.y && this.y < 200) this.y += this.speed;
+        if (sharkHitboxY < bossHitboxY) this.y -= this.speed;
+        if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;
     }
 
     endbossDyingAnimation() {
