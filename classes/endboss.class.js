@@ -135,6 +135,7 @@ class Endboss extends MovableObject {
     endbossDyingAnimation() {
         this.isDead = true;
         clearInterval(this.endbossSwimmingIntervall);
+        clearInterval(this.animateAfterHitInterval);
         this.currentImage = 0;
 
         setInterval(() => {

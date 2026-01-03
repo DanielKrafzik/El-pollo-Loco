@@ -76,12 +76,8 @@ class World {
                             }
                         } else if (enemy.endboss ) {
                             this.bubbles.splice(bIndex, 1);
-                                if(bubble.poisonous){
-                                    enemy.energy -= 20;
-                                    clearInterval(enemy.endbossSwimmingInterval);
-                                    clearInterval(enemy.animateAfterHitInterval);
-                                    enemy.animateAfterHit();
-                                    enemy.playAnimation(enemy.IMAGES_HURT);
+                            if(bubble.poisonous){
+                                enemy.energy -= 20;
                                 if(enemy.energy <= 0) {
                                     enemy.speed = 0.5;
                                     enemy.endbossDyingAnimation();
@@ -89,6 +85,11 @@ class World {
                                     setTimeout(() => {
                                         this.level.enemies.splice(eIndex, 1);
                                     }, 3000);
+                                } else if (enemy.energy > 0) {
+                                    clearInterval(enemy.endbossSwimmingInterval);
+                                    clearInterval(enemy.animateAfterHitInterval);
+                                    enemy.animateAfterHit();
+                                    enemy.playAnimation(enemy.IMAGES_HURT);
                                 }
                             }
                         }
