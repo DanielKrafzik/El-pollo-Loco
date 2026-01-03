@@ -36,7 +36,7 @@ class World {
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach(enemy => {
-                if(this.shark.isColliding(enemy) && this.lastHitTime >= 2) {                    
+                if(this.shark.isColliding(enemy) && !this.hitTimePassed(this.shark)) {                    
                     this.shark.hit();
                     this.statusBar.setPercentage(this.shark.energy);
                 }
