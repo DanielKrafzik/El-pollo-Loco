@@ -152,7 +152,7 @@ class Shark extends MovableObject {
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
-            } else if(this.world.hitTimePassed()){ 
+            } else if(this.world.hitTimePassed(this)){ 
                 this.playAnimation(this.IMAGES_HURT);
             } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {                
                 this.playAnimation(this.IMAGES_SWIMMING);   

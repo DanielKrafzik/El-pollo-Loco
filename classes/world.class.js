@@ -77,8 +77,10 @@ class World {
                         } else if (enemy.endboss ) {
                             this.bubbles.splice(bIndex, 1);
                             if(bubble.poisonous){
-                                enemy.energy -= 20;
+                                enemy.hit();
                                 if(enemy.energy <= 0) {
+                                    clearInterval(this.moveTowardsSharkIntervall);
+                                    clearInterval(enemy.endbossSwimmingInterval);
                                     enemy.speed = 0.5;
                                     enemy.endbossDyingAnimation();
                                     enemy.moveUp();
@@ -87,9 +89,10 @@ class World {
                                     }, 3000);
                                 } else if (enemy.energy > 0) {
                                     clearInterval(enemy.endbossSwimmingInterval);
-                                    clearInterval(enemy.animateAfterHitInterval);
-                                    enemy.animateAfterHit();
-                                    enemy.playAnimation(enemy.IMAGES_HURT);
+                                    clearInterval(this.moveTowardsSharkIntervall);
+                                    this.moveTowardsSharkIntervall = setInterval(() => {
+                                        enemy.moveTowardsShark();
+                                    }, 1000 / 60);
                                 }
                             }
                         }
@@ -156,8 +159,8 @@ class World {
         this.ctx.restore();
     }
 
-    hitTimePassed() {
-        this.lastHitTime = new Date().getTime() - this.shark.lastHit;
+    hitTimePassed(character) {        
+        this.lastHitTime = new Date().getTime() - character.lastHit;
         this.lastHitTime = this.lastHitTime / 1000;
         return this.lastHitTime < 1;
     }

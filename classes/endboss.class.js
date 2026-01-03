@@ -71,26 +71,33 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
-        this.animate();  
         this.world = null;
     }   
 
     setWorld(world) {
         this.world = world;
+        this.animate();  
     }
 
     animate() {
         let triggered = false;
+        setInterval(() => {
+            if(this.world.hitTimePassed(this)){ 
+                    this.playAnimation(this.IMAGES_HURT);
+            } else if (this.energy > 0) {
+                this.playAnimation(this.IMAGES_SWIMMING);
+            }
+        }, 250);
         this.endbossSwimmingInterval = setInterval(() => {
-            if(this.world.shark.x >= 3000) {
+            if(this.world.shark.x >= 3400) {
                 
                 triggered = true;
             }
             if(triggered) {
                 this.updateAnimation();
-                this.moveTowardsShark();
+                this.moveTowardsShark();   
             }
-        }, 1000 / 60);        
+        }, 1000 / 60);     
     }
 
     updateAnimation() {
@@ -108,13 +115,6 @@ class Endboss extends MovableObject {
         }
     }
 
-    animateAfterHit() {
-        this.animateAfterHitInterval = setInterval(() => {
-            this.playAnimation(this.IMAGES_SWIMMING);
-            this.moveTowardsShark();
-        }, 100);
-    }
-
     moveTowardsShark() {
         const shark = this.world.shark;
         const bossHitboxY = this.y + this.offset.top; 
@@ -129,20 +129,19 @@ class Endboss extends MovableObject {
             this.x += this.speed;
         }
         if (sharkHitboxY < bossHitboxY) this.y -= this.speed;
-        if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;
+        if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;        
     }
 
     endbossDyingAnimation() {
         this.isDead = true;
         clearInterval(this.endbossSwimmingIntervall);
-        clearInterval(this.animateAfterHitInterval);
         this.currentImage = 0;
 
         setInterval(() => {
             let i = this.currentImage % this.IMAGES_DEAD.length;
             let path = this.IMAGES_DEAD[i];
             this.img = this.imageCache[path];
-            this.currentImage++;
+            this.currentImage++;            
         }, 1000 / 6);
     }
 }
