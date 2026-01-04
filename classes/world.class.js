@@ -95,9 +95,6 @@ class World {
                                 } else if (enemy.energy > 0) {
                                     clearInterval(enemy.endbossSwimmingInterval);
                                     clearInterval(this.moveTowardsSharkIntervall);
-                                    this.moveTowardsSharkIntervall = setInterval(() => {
-                                        enemy.moveTowardsShark();
-                                    }, 1000 / 60);
                                 }
                             }
                         }
@@ -117,8 +114,8 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinBar);
         this.addToMap(this.poisonBar);
-        if(this.level.enemies[14].triggered){
-            this.addToMap(this.level.enemies[14].healthbar);
+        if(this.level.enemies[14]){
+            if(!this.level.enemies[14].triggered) this.addToMap(this.level.enemies[14].healthbar);
         }
 
         this.ctx.translate(this.camera_x, 0);
