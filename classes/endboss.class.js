@@ -73,6 +73,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.healthbar = new Endbosshealthbar();
         this.world = null;
     }   
 

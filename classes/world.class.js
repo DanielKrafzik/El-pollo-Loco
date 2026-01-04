@@ -82,6 +82,7 @@ class World {
                             this.bubbles.splice(bIndex, 1);
                             if(bubble.poisonous){
                                 enemy.hit();
+                                enemy.healthbar.setHealth(enemy.energy);
                                 if(enemy.energy <= 0) {
                                     clearInterval(this.moveTowardsSharkIntervall);
                                     clearInterval(enemy.endbossSwimmingInterval);
@@ -116,6 +117,9 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.coinBar);
         this.addToMap(this.poisonBar);
+        if(this.level.enemies[14].triggered){
+            this.addToMap(this.level.enemies[14].healthbar);
+        }
 
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.enemies);
