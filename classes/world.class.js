@@ -39,6 +39,10 @@ class World {
                 if(this.shark.isColliding(enemy) && !this.hitTimePassed(this.shark)) {                    
                     this.shark.hit();
                     this.statusBar.setPercentage(this.shark.energy);
+                    if(enemy.endboss) {
+                        clearInterval(enemy.endbossSwimmingInterval);
+                        enemy.endbossHitCounter = 0;
+                    }                    
                 }
             });
             this.level.collectibles.forEach((collectible, index) => {

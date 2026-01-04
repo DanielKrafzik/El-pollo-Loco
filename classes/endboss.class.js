@@ -5,6 +5,8 @@ class Endboss extends MovableObject {
     y = 0;
     energy = 60;
     endboss = true;
+    endbossHitCounter = 6;
+    triggered = false;
 
     IMAGES_SWIMMING = [
         './img/2.Enemy/3 Final Enemy/2.floating/1.png',
@@ -80,27 +82,33 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        let triggered = false;
         setInterval(() => {
             if(this.world.hitTimePassed(this)){ 
-                    this.playAnimation(this.IMAGES_HURT);
-            } else if (this.energy > 0) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.energy > 0 && this.triggered && this.endbossHitCounter >= 6) {
                 this.playAnimation(this.IMAGES_SWIMMING);
+            } else if (this.endbossHitCounter < 6 && this.triggered) {
+                this.endbossHitCounter++;
+                this.playAnimation(this.IMAGES_ATTACK);
             }
         }, 250);
         this.endbossSwimmingInterval = setInterval(() => {
-            if(this.world.shark.x >= 3400) {
+            if(this.world.shark.x >= 3200) {
                 
-                triggered = true;
+                this.triggered = true;
             }
-            if(triggered) {
-                this.updateAnimation();
+            if(this.triggered) {
+                this.updateAnimation(this.IMAGES_INTRODUCTION ,this.IMAGES_SWIMMING);
+            }
+        }, 1000 / 60);    
+        setInterval(() => {
+            if(this.triggered && this.energy > 0) {
                 this.moveTowardsShark();   
             }
-        }, 1000 / 60);     
+        }, 1000 / 60);
     }
 
-    updateAnimation() {
+    updateAnimation(animation1, animation2) {
         if (!this.lastAnimTime) this.lastAnimTime = 0;
 
         const now = Date.now();
@@ -108,8 +116,8 @@ class Endboss extends MovableObject {
 
         if (now - this.lastAnimTime > ANIM_SPEED) {
             this.playAnimationOnce(
-                this.IMAGES_INTRODUCTION,
-                this.IMAGES_SWIMMING
+                animation1,
+                animation2
             );
             this.lastAnimTime = now;
         }
@@ -129,12 +137,11 @@ class Endboss extends MovableObject {
             this.x += this.speed;
         }
         if (sharkHitboxY < bossHitboxY) this.y -= this.speed;
-        if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;        
+        if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;    
     }
 
     endbossDyingAnimation() {
         this.isDead = true;
-        clearInterval(this.endbossSwimmingIntervall);
         this.currentImage = 0;
 
         setInterval(() => {
