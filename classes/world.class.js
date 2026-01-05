@@ -136,6 +136,7 @@ class World {
 
     addObjectsToMap(objects) {
         objects.forEach(obj => {
+            if(obj.endboss && !obj.triggered) return;
             this.addToMap(obj);
         });
     }

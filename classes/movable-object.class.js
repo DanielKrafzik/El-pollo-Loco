@@ -45,7 +45,7 @@ class MovableObject extends DrawableObject {
                 this.currentImage++;                     
     }
 
-    playAnimationOnce(arr,endArr) {
+    /*playAnimationOnce(arr,endArr) {
         let i = this.currentImage % arr.length;
         let path = arr[i];
 
@@ -63,7 +63,37 @@ class MovableObject extends DrawableObject {
             this.img = this.imageCache[path];        
             this.currentImage++;   
         }
-    }
+    }*/
+
+        playAnimationOnce(introArr, loopArr) {
+            // INTRO
+            if (!this.introFinished) {
+                let i = this.currentImage;
+                let path = introArr[i];
+
+                if (!this.imageCache[path]) return;
+
+                this.img = this.imageCache[path];
+                this.currentImage++;
+
+                // 👉 Intro fertig
+                if (this.currentImage >= introArr.length) {
+                    this.introFinished = true;
+                    this.currentImage = 0; // 🔥 wichtig für Loop
+                }
+            } 
+            
+            // LOOP
+            else if (loopArr) {
+                let i = this.currentImage % loopArr.length;
+                let path = loopArr[i];
+
+                if (!this.imageCache[path]) return;
+
+                this.img = this.imageCache[path];
+                this.currentImage++;
+            }
+        }
 
     moveRight() {
     
