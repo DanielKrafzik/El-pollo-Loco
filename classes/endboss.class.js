@@ -87,7 +87,7 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if(this.world.hitTimePassed(this)){ 
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.energy > 0 && this.triggered && this.endbossHitCounter >= 6) {
+            } else if (this.energy > 0 && this.triggered && this.endbossHitCounter >= 6 && this.introFinished) {
                 this.playAnimation(this.IMAGES_SWIMMING);
             } else if (this.endbossHitCounter < 6 && this.triggered) {
                 this.endbossHitCounter++;
@@ -101,7 +101,7 @@ class Endboss extends MovableObject {
             }
             if(this.triggered) {
                 if (!this.introFinished) {
-                    this.updateAnimation(this.IMAGES_INTRODUCTION, null, 300);
+                    this.updateAnimation(this.IMAGES_INTRODUCTION, null, 120);
                 } else {
                     this.updateAnimation(this.IMAGES_SWIMMING, null, 120);
                 }
@@ -123,6 +123,7 @@ class Endboss extends MovableObject {
                 animation1,
                 animation2
             );
+            
             this.lastAnimTime = now;
         }
     }
