@@ -42,35 +42,35 @@ class MovableObject extends DrawableObject {
                 let i = this.currentImage % arr.length;
                 let path = arr[i];
                 this.img = this.imageCache[path];
-                this.currentImage++;                     
+                this.currentImage++;    
     }
 
-        playAnimationOnce(introArr, loopArr) {
-            if (!this.introFinished) {
-                let i = this.currentImage;
-                let path = introArr[i];
-
-                if (!this.imageCache[path]) return;
-
-                this.img = this.imageCache[path];
-                this.currentImage++;
-                
-                if (this.currentImage >= introArr.length) {
-                    this.introFinished = true;
-                    this.currentImage = 0;
-                }
-            } 
+    playAnimationOnce(introArr, loopArr) {
+        if (!this.animationFinished) {
+            let i = this.currentImage % introArr.length;
+            let path = introArr[i];
             
-            else if (loopArr) {
-                let i = this.currentImage % loopArr.length;
-                let path = loopArr[i];
+            if (!this.imageCache[path]) return;
 
-                if (!this.imageCache[path]) return;
-
-                this.img = this.imageCache[path];
-                this.currentImage++;
+            this.img = this.imageCache[path];
+            this.currentImage++;
+            
+            if (this.currentImage >= introArr.length) {
+                this.animationFinished = true;
+                this.currentImage = 0;
             }
+        } 
+        
+        else if (loopArr) {
+            let i = this.currentImage % loopArr.length;
+            let path = loopArr[i];
+
+            if (!this.imageCache[path]) return;
+
+            this.img = this.imageCache[path];
+            this.currentImage++;
         }
+    }
 
     moveRight() {
     

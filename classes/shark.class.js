@@ -149,6 +149,29 @@ class Shark extends MovableObject {
 
         setInterval(() => {
             this.restCounter++;
+            if (this.isBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_BUBBLES);
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+                    this.isBubbleAnimating = false;
+                    this.animationFinished = false;
+                    this.restCounter = 0;
+                }
+                return;
+            }
+            if (this.isPoisonBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
+
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
+                    this.poisonCount--;
+                    this.world.poisonBar.setBarProgress(this.poisonCount);
+                    this.isPoisonBubbleAnimating = false;
+                    this.animationFinished = false;
+                    this.restCounter = 0;
+                }
+                return;
+            }
             if(this.isDead()){
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
@@ -163,37 +186,16 @@ class Shark extends MovableObject {
             else {
                 this.playAnimation(this.IMAGES_WAITING);                
             }
-            if (this.world.keyboard.E && !this.isBubbleAnimating) {
+            if (this.world.keyboard.E && !this.isBubbleAnimating) {                
                 this.isBubbleAnimating = true;
                 this.animationFinished = false;
                 this.currentImage = 0;
+                
             }
             if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) {
                 this.isPoisonBubbleAnimating = true;
                 this.animationFinished = false;
                 this.currentImage = 0;
-            }
-            if (this.isBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_BUBBLES);
-
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
-                    this.isBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
-            }
-            if (this.isPoisonBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
-
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-                    this.poisonCount--;
-                    this.world.poisonBar.setBarProgress(this.poisonCount);
-                    this.isPoisonBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
             }
         }, 250);    
     }
