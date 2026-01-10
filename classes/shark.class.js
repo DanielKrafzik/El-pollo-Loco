@@ -197,7 +197,7 @@ class Shark extends MovableObject {
                 this.animationFinished = false;
                 this.currentImage = 0;
             }
-        }, 250);    
+        }, this.isBubbleAnimating ? 40 : 250);    
     }
 
     shootBubble(bubbleImg) {

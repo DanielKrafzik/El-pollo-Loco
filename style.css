@@ -4,6 +4,20 @@ body {
     align-items: center;
     justify-content: center;
     height:  100vh;
+    position: relative;
+    margin: 0;
+}
+
+body::before {
+    background-image: url('img/3. Background/Dark/1.png');
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px);
+    transform: scale(1.1);
+    z-index: -1;
 }
 
 canvas {
