@@ -23,13 +23,19 @@
     <script src="./classes/bubble.class.js"></script>
     <script src="./classes/level.class.js"></script>
     <script src="./levels/level1.js"></script>
-    <script src="./js/game.js"></script>
+    <script src="./js/game.js" defer></script>
 </head>
 <body onload="init()">
-    
-    <canvas id="canvas" width="960" height="540">
 
-    </canvas>
+    <div id="game-wrapper">
+        <canvas id="canvas" width="960" height="540"></canvas>
+
+        <div id="start-screen">
+            <h1>Shark Game 🦈</h1>
+            <button id="play-btn"></button>
+            <button id="fullscreen-btn">⛶ Fullscreen</button>
+        </div>
+    </div>
 
 </body>
 </html>

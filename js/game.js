@@ -2,9 +2,16 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 
+document.getElementById("play-btn").addEventListener("click", () => {
+    document.getElementById("start-screen").style.display = "none";
+    initGame();
+});
 
 function init() {
     canvas = document.getElementById('canvas');
+}
+
+function initGame() {
     world = new World(canvas, keyboard);
 }
 
@@ -47,5 +54,15 @@ window.addEventListener('keyup', (event) => {
     }
     if(event.keyCode == 69){
         keyboard.E = false;
+    }
+});
+
+document.getElementById("fullscreen-btn").addEventListener("click", () => {
+    const canvas = document.getElementById("canvas");
+
+    if (!document.fullscreenElement) {
+        canvas.requestFullscreen();
+    } else {
+        document.exitFullscreen();
     }
 });
