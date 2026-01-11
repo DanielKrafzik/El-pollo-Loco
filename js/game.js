@@ -66,3 +66,11 @@ document.getElementById("fullscreen-btn").addEventListener("click", () => {
         document.exitFullscreen();
     }
 });
+
+document.getElementById("controls-btn").addEventListener("click", () => {
+    document.getElementById("controls-screen").style.display = "flex";
+});
+
+document.getElementById("close-controls-btn").addEventListener("click", () => {
+    document.getElementById("controls-screen").style.display = "none";
+});

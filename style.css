@@ -67,11 +67,42 @@ canvas {
     z-index: 10;
 }
 
-#start-screen button {
-    font-size: 24px;
-    padding: 12px 32px;
-    cursor: pointer;
+#controls-screen {
+    position: absolute;
+    inset: 0; 
+    background-image: url('./assets/3_game_background.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border-radius: 2%;
+
+    z-index: 10;
 }
+
+#controls-screen img {
+    width: 40%;
+    height: auto;
+    border: 5px solid white;
+    border-radius: 15px;
+}
+
+#controls-screen p, h2 {
+    color: white;
+}
+
+#controls-screen div {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    width: 40%;
+    justify-content: space-between;
+} 
 
 #play-btn {  
     background-image: url('./img/6.Botones/Start/1.png');    
@@ -81,9 +112,24 @@ canvas {
     background-image: url('./img/6.Botones/Full Screen/Mesa de trabajo 9.png');
 }
 
-.start-btn:hover {
+#controls-btn, 
+#close-controls-btn {
+    width: 200px;
+    height: 60px;
+    font-family: 'LuckiestGuy', sans-serif;
+    background-color: rgb(83, 26, 130);
+    color: white;
+    border-color: white;
+    font-size: 32px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.start-btn:hover,
+#controls-btn:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
+    cursor: pointer;
 }
 
 .start-btn {
