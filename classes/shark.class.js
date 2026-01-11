@@ -186,7 +186,7 @@ class Shark extends MovableObject {
             else {
                 this.playAnimation(this.IMAGES_WAITING);                
             }
-            if (this.world.keyboard.E && !this.isBubbleAnimating) {                
+            if (this.world.keyboard.D && !this.isBubbleAnimating) {                
                 this.isBubbleAnimating = true;
                 this.animationFinished = false;
                 this.currentImage = 0;
