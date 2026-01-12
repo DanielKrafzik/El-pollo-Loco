@@ -170,6 +170,13 @@ class World {
         this.lastHitTime = this.lastHitTime / 1000;
         return this.lastHitTime < 1;
     }
+
+    resize(width, height) {
+        this.canvas.width = width;
+        this.canvas.height = height;
+        this.ctx = this.canvas.getContext("2d");
+        this.camera_x = 0;
+    }
     
 }
     

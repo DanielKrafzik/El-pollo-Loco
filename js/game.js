@@ -8,7 +8,7 @@ document.getElementById("play-btn").addEventListener("click", () => {
 });
 
 function init() {
-    canvas = document.getElementById('canvas');
+    canvas = document.getElementById('canvas');    
 }
 
 function initGame() {
@@ -67,10 +67,31 @@ document.getElementById("fullscreen-btn").addEventListener("click", () => {
     }
 });
 
+document.addEventListener("fullscreenchange", () => {
+    console.log(world);
+    
+    if (!world) return;
+
+    if (document.fullscreenElement) {
+        world.resize(window.innerWidth, window.innerHeight);
+    } else {
+        world.resize(960, 540);
+    }
+});
+
+
 document.getElementById("controls-btn").addEventListener("click", () => {
     document.getElementById("controls-screen").style.display = "flex";
 });
 
 document.getElementById("close-controls-btn").addEventListener("click", () => {
     document.getElementById("controls-screen").style.display = "none";
+});
+
+document.getElementById("info-btn").addEventListener("click", () => {
+    document.getElementById("start-content").style.display = "flex";
+});
+
+document.getElementById("return-btn").addEventListener("click", () => {
+    document.getElementById("start-content").style.display = "none";
 });
