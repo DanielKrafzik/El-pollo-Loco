@@ -10,34 +10,41 @@ class World {
     poisonBar = new PoisonBar();
     bubbles = [];
     lastHitTime = 0;
+    isPaused = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.draw();
-        this.setWorld();
         this.checkCollisions();
         this.connectWorldToObjects();
     }
 
     connectWorldToObjects() {
+        this.shark.setWorld(this);
         this.level.enemies.forEach(enemy => {
-            if (enemy.setWorld) {
                 enemy.setWorld(this);
-            }
+        });
+        this.level.collectibles.forEach(collectible => {
+                collectible.setWorld(this);
         });
     }
 
-    setWorld() {
-        this.shark.world = this;
+    pause() {
+        this.isPaused = true;
     }
 
-    checkCollisions() {
+    resume() {
+        this.isPaused = false;
+    }
+
+    checkCollisions() {        
         setInterval(() => {
+            if (this.isPaused) return;
             this.level.enemies.forEach(enemy => {
                 if(this.shark.isColliding(enemy) && !this.hitTimePassed(this.shark)) {                    
-                    this.shark.hit();
+                    this.shark.hit();                    
                     this.statusBar.setPercentage(this.shark.energy);
                     if(enemy.endboss) {
                         clearInterval(enemy.endbossSwimmingInterval);

@@ -14,6 +14,11 @@ class DrawableObject  {
         bottom:0,
         left:0
     };
+    world = null;
+
+    setWorld(world) {
+        this.world = world;
+    }
 
     loadImage(src) {
         this.img = new Image();

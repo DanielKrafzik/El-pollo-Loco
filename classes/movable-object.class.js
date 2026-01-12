@@ -12,6 +12,7 @@ class MovableObject extends DrawableObject {
 
     bubbleRise() {
         setInterval(() => {
+            if (!this.world || this.world.isPaused) return;
                 this.y += this.speedY;
                 this.speedY -= this.acceleration;
         }, 1000 / 60);
@@ -78,12 +79,14 @@ class MovableObject extends DrawableObject {
 
     moveLeft() {
         this.moveLeftInterval =setInterval(() => {
+            if (!this.world || this.world.isPaused) return;
             this.x -= this.speed;
         }, 1000 / 60);
     }
 
     moveUp() {
         setInterval(() => {
+            if (!this.world || this.world.isPaused) return;
             this.y -= this.speed * 2;
         }, 1000 / 60);
     }
@@ -92,6 +95,7 @@ class MovableObject extends DrawableObject {
         this.direction = 1;
 
         this.moveUpDownInterval = setInterval(() => {
+            if (!this.world || this.world.isPaused) return;
             this.y += this.direction * speed;
             
             if (this.y >= endY) {

@@ -125,6 +125,7 @@ class Shark extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world.isPaused) return;
             if(this.world.keyboard.RIGHT && this.x < 3700){
                 this.x += this.speed;
                 this.otherDirection = false;
@@ -148,6 +149,7 @@ class Shark extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.world.isPaused) return;
             this.restCounter++;
             if (this.isBubbleAnimating) {
                 this.playAnimationOnce(this.IMAGES_BUBBLES);

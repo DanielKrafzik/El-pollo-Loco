@@ -85,6 +85,7 @@ class Endboss extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world.isPaused) return;
             if(this.world.hitTimePassed(this)){ 
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.energy > 0 && this.triggered && this.endbossHitCounter >= 6 && this.animationFinished) {
@@ -95,6 +96,7 @@ class Endboss extends MovableObject {
             }
         }, 250);
         this.endbossSwimmingInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             if(this.world.shark.x >= 3200) {
                 
                 this.triggered = true;
@@ -108,6 +110,7 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 60);    
         setInterval(() => {
+            if (this.world.isPaused) return;
             if(this.triggered && this.energy > 0) {
                 this.moveTowardsShark();   
             }

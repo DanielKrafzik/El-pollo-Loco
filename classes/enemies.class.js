@@ -5,6 +5,7 @@ class Enemies extends MovableObject {
     energy = 40;
     colorIndex;
     isDead = false;
+    world;
 
     //PUFFER FISH IMAGES
     IMAGES_SWIMMING_PUFFER = [
@@ -223,16 +224,20 @@ class Enemies extends MovableObject {
     animatePuffer(currentColor) {
         if (this.isDead) return;
         clearInterval(this.normalPufferAnimationInterval);
+    
 
         this.currentImage = 0;
         this.offset.bottom = 30; 
         this.offset.top = 10;
 
-        this.normalPufferAnimationInterval = setInterval(() => {
+        this.normalPufferAnimationInterval = setInterval(() => {            
+            if (this.world.isPaused) return;  
+                               
             this.normalPufferAnimation(currentColor);
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.normalPufferAnimationInterval);
             this.transitionPufferAnimation(currentColor);
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
@@ -255,6 +260,7 @@ class Enemies extends MovableObject {
         this.currentImage = 0;
 
         this.transitionPufferAnimationInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             let frames = this.pufferTransitionAnimations[currentColor];
             let i = this.currentImage % frames.length;
             this.img = this.imageCache[frames[i]];
@@ -262,6 +268,7 @@ class Enemies extends MovableObject {
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.transitionPufferAnimationInterval);
             this.bubbleSwimAnimation(currentColor);
         }, 833);
@@ -277,6 +284,7 @@ class Enemies extends MovableObject {
         this.offset.top = 0;
 
         this.bubbleSwimInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             let frames = this.bubbleSwimAnimations[currentColor];
             let i = this.currentImage % frames.length;
             this.img = this.imageCache[frames[i]];
@@ -284,6 +292,7 @@ class Enemies extends MovableObject {
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.bubbleSwimInterval);
             this.transitionPufferAnimationReverse(currentColor);
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
@@ -295,6 +304,7 @@ class Enemies extends MovableObject {
 
         this.currentImage = this.pufferTransitionAnimations[currentColor].length - 1;
         this.transitionPufferAnimationReverseInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             let frames = this.pufferTransitionAnimations[currentColor];
             let i = this.currentImage % frames.length;
             this.img = this.imageCache[frames[i]];
@@ -302,6 +312,7 @@ class Enemies extends MovableObject {
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.transitionPufferAnimationReverseInterval);
             this.animatePuffer(currentColor);
         }, 833);
@@ -323,6 +334,7 @@ class Enemies extends MovableObject {
     animateJelly(currentColor) {
         if (this.isDead) return;
         this.animateJellyInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             let i = this.currentImage % this.jellyColorAnimations[currentColor].length;
             
             let path = this.jellyColorAnimations[currentColor][i];
@@ -331,6 +343,7 @@ class Enemies extends MovableObject {
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.animateJellyInterval);
             this.animateJellyTransition(currentColor);
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
@@ -341,6 +354,7 @@ class Enemies extends MovableObject {
         this.currentImage = 0;
 
         this.animateJellyTransitionInterval = setInterval(() => {
+            if (this.world.isPaused) return;
             let i = this.currentImage % this.jellyTransitionAnimations[currentColor].length;
             let path = this.jellyTransitionAnimations[currentColor][i];
             this.img = this.imageCache[path];
@@ -348,6 +362,7 @@ class Enemies extends MovableObject {
         }, 1000 / 6);
 
         setTimeout(() => {
+            if (this.world.isPaused) return;
             clearInterval(this.animateJellyTransitionInterval);
             this.animateJelly(currentColor);
         },Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
@@ -368,6 +383,7 @@ class Enemies extends MovableObject {
         }
 
         setInterval(() => {
+            if (this.world.isPaused) return;
             let i = this.currentImage % deadImgArray[this.colorIndex].length;
             let path = deadImgArray[this.colorIndex][i];
             this.img = this.imageCache[path];

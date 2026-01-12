@@ -4,15 +4,14 @@ let keyboard = new Keyboard();
 
 document.getElementById("play-btn").addEventListener("click", () => {
     document.getElementById("start-screen").style.display = "none";
-    initGame();
+    world.resume();
 });
 
 function init() {
-    canvas = document.getElementById('canvas');    
-}
-
-function initGame() {
-    world = new World(canvas, keyboard);
+    canvas = document.getElementById('canvas');
+    world = new World(canvas, keyboard);    
+    world.pause();
+    
 }
 
 window.addEventListener('keydown', (event) => {
