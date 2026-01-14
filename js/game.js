@@ -94,3 +94,11 @@ document.getElementById("info-btn").addEventListener("click", () => {
 document.getElementById("return-btn").addEventListener("click", () => {
     document.getElementById("start-content").style.display = "none";
 });
+
+document.getElementById("legal-btn").addEventListener("click", () => {
+    document.getElementById("legal-notice").style.display = "flex";
+});
+
+document.getElementById("close-legal-btn").addEventListener("click", () => {
+    document.getElementById("legal-notice").style.display = "none";
+});
