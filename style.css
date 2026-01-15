@@ -239,3 +239,33 @@ canvas {
 #legal-notice p, h3, li {
     color: white;
 }
+
+/* UI Overlay Buttons */
+
+#ui-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+#ui-overlay button {
+    pointer-events: auto;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+#pause-btn {
+    top: 15px;
+    right: 15px;
+}
+
+#sound-btn {
+    top: 15px;
+    right: 80px;
+}

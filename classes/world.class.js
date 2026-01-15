@@ -35,6 +35,10 @@ class World {
         this.isPaused = true;
     }
 
+    togglePause() {
+        this.isPaused = !this.isPaused;
+    }
+
     resume() {
         this.isPaused = false;
     }

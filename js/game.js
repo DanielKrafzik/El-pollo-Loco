@@ -102,3 +102,7 @@ document.getElementById("legal-btn").addEventListener("click", () => {
 document.getElementById("close-legal-btn").addEventListener("click", () => {
     document.getElementById("legal-notice").style.display = "none";
 });
+
+document.getElementById("pause-btn").addEventListener("click", () => {
+    world.togglePause();
+});
