@@ -19,6 +19,7 @@ class World {
         this.draw();
         this.checkCollisions();
         this.connectWorldToObjects();
+        this.checkWinningCondition();
     }
 
     connectWorldToObjects() {
@@ -187,6 +188,19 @@ class World {
         this.canvas.height = height;
         this.ctx = this.canvas.getContext("2d");
         this.camera_x = 0;
+    }
+
+    checkWinningCondition() {
+        this.endscreenInterval = setInterval(() => {
+            if (this.level.enemies[14] && this.level.enemies[14].energy <= 0 || this.shark.energy <= 0) {
+                document.getElementById("endscreen").style.display = "flex";
+                if(this.shark.energy <= 0) {
+                    document.getElementById("endscreen-title").innerText = "Game Over!";
+                    document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
+                    clearInterval(this.endscreenInterval);
+                }
+            }
+        }, 1000);
     }
     
 }

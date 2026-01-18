@@ -71,7 +71,8 @@ canvas {
 
 #controls-screen,
 #start-content,
-#legal-notice {
+#legal-notice,
+#endscreen {
     position: absolute;
     inset: 0; 
     background-image: url('./assets/3_game_background.png');
@@ -136,7 +137,9 @@ canvas {
 #close-controls-btn,
 #info-btn,
 #return-btn,
-#close-legal-btn {
+#close-legal-btn,
+#restart-btn,
+#menu-btn {
     width: 200px;
     height: 60px;
     font-family: 'LuckiestGuy', sans-serif;
@@ -154,7 +157,9 @@ canvas {
 #info-btn:hover,
 #return-btn:hover,
 #legal-btn:hover,
-#close-legal-btn:hover {
+#close-legal-btn:hover,
+#restart-btn:hover,
+#menu-btn:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
     cursor: pointer;
@@ -262,10 +267,24 @@ canvas {
 
 #pause-btn {
     top: 15px;
-    right: 15px;
+    right: 50%;
+}
+
+#pause-btn img,
+#sound-btn img {
+    width: 20px;
+    height: 20px;
 }
 
 #sound-btn {
     top: 15px;
-    right: 80px;
+    right: 40%;
+}
+
+/* End Screen */
+
+#endscreen p {
+    color: white;
+    font-size: 24px;
+    margin: 20px 0;
 }

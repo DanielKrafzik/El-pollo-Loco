@@ -15,7 +15,6 @@ class Bubble extends MovableObject{
 
     animate(){
         setInterval(() => {
-        if (this.world.isPaused) return;
             if (this.goingLeft){
                 this.x -= this.speed;
             } else {

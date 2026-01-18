@@ -105,4 +105,28 @@ document.getElementById("close-legal-btn").addEventListener("click", () => {
 
 document.getElementById("pause-btn").addEventListener("click", () => {
     world.togglePause();
+    if (document.getElementById("pause-btn-img").src.includes("play")) {
+        document.getElementById("pause-btn-img").src = "./assets/pause.png";
+    } else {
+        document.getElementById("pause-btn-img").src = "./assets/play-buttton.png";
+    }   
+});
+
+document.getElementById("sound-btn").addEventListener("click", () => {
+    if (document.getElementById("sound-btn-img").src.includes("volume-up")) {
+        document.getElementById("sound-btn-img").src = "./assets/mute.png";
+    } else {
+        document.getElementById("sound-btn-img").src = "./assets/volume-up.png";
+    }
+});
+
+document.getElementById("restart-btn").addEventListener("click", () => {
+    location.reload();
+});
+
+document.getElementById("menu-btn").addEventListener("click", () => {
+    document.getElementById("endscreen").style.display = "none";
+    document.getElementById("start-screen").style.display = "flex";
+    console.log("hi");
+    
 });
