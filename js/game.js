@@ -127,6 +127,4 @@ document.getElementById("restart-btn").addEventListener("click", () => {
 document.getElementById("menu-btn").addEventListener("click", () => {
     document.getElementById("endscreen").style.display = "none";
     document.getElementById("start-screen").style.display = "flex";
-    console.log("hi");
-    
 });
