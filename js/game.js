@@ -5,6 +5,8 @@ let keyboard = new Keyboard();
 document.getElementById("play-btn").addEventListener("click", () => {
     document.getElementById("start-screen").style.display = "none";
     world.resume();
+    world.sound.play('gameMusic');
+    world.sound.stop('startMusic');
 });
 
 function init() {
@@ -113,6 +115,7 @@ document.getElementById("pause-btn").addEventListener("click", () => {
 });
 
 document.getElementById("sound-btn").addEventListener("click", () => {
+    world.sound.toggleMute();
     if (document.getElementById("sound-btn-img").src.includes("volume-up")) {
         document.getElementById("sound-btn-img").src = "./assets/mute.png";
     } else {
@@ -121,10 +124,23 @@ document.getElementById("sound-btn").addEventListener("click", () => {
 });
 
 document.getElementById("restart-btn").addEventListener("click", () => {
+    sessionStorage.setItem("skipStart", "true");
     location.reload();
 });
 
 document.getElementById("menu-btn").addEventListener("click", () => {
-    document.getElementById("endscreen").style.display = "none";
-    document.getElementById("start-screen").style.display = "flex";
+    location.reload();
+    world.sound.stop('gameMusic');
+    world.sound.play('startMusic');
+});
+
+window.addEventListener("load", () => {
+    if (sessionStorage.getItem("skipStart") === "true") {
+        document.getElementById("start-screen").style.display = "none";
+        sessionStorage.removeItem("skipStart");
+        init();
+        world.resume();
+        world.sound.stop('startMusic');
+        world.sound.play('gameMusic');
+    }
 });

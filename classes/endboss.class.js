@@ -93,6 +93,7 @@ class Endboss extends MovableObject {
             } else if (this.endbossHitCounter < 6 && this.triggered) {
                 this.endbossHitCounter++;
                 this.playAnimation(this.IMAGES_ATTACK);
+                this.world.sound.play('orcaAttack');
             }
         }, 250);
         this.endbossSwimmingInterval = setInterval(() => {
@@ -104,6 +105,7 @@ class Endboss extends MovableObject {
             if(this.triggered) {
                 if (!this.animationFinished) {
                     this.updateAnimation(this.IMAGES_INTRODUCTION, null, 120);
+                    this.world.sound.play('boss');
                 } else {
                     this.updateAnimation(this.IMAGES_SWIMMING, null, 120);
                 }

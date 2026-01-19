@@ -123,8 +123,8 @@ class Shark extends MovableObject {
         this.animate();
     }
 
-    animate() {
-        setInterval(() => {
+    animate() {        
+        setInterval(() => {            
             if (this.world.isPaused) return;
             if(this.world.keyboard.RIGHT && this.x < 3700){
                 this.x += this.speed;
@@ -155,6 +155,7 @@ class Shark extends MovableObject {
                 this.playAnimationOnce(this.IMAGES_BUBBLES);
                 if (this.animationFinished) {
                     this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+                    this.world.sound.play('bubble');
                     this.isBubbleAnimating = false;
                     this.animationFinished = false;
                     this.restCounter = 0;

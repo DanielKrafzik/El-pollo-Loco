@@ -2,6 +2,7 @@ class World {
     shark = new Shark();
     level = level1;
     canvas;
+    sound;
     ctx;
     camera_x = 0;
     keyboard;
@@ -13,9 +14,11 @@ class World {
     isPaused = false;
 
     constructor(canvas, keyboard) {
+        this.sound = new SoundManager();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.sound.play('startMusic');
         this.draw();
         this.checkCollisions();
         this.connectWorldToObjects();
@@ -49,7 +52,8 @@ class World {
             if (this.isPaused) return;
             this.level.enemies.forEach(enemy => {
                 if(this.shark.isColliding(enemy) && !this.hitTimePassed(this.shark)) {                    
-                    this.shark.hit();                    
+                    this.shark.hit();     
+                    this.sound.play('sharkHit');               
                     this.statusBar.setPercentage(this.shark.energy);
                     if(enemy.endboss) {
                         clearInterval(enemy.endbossSwimmingInterval);
@@ -60,6 +64,7 @@ class World {
             this.level.collectibles.forEach((collectible, index) => {
                 if(this.shark.isColliding(collectible)) {
                     this.shark.collect();
+                    this.sound.play('coin');
                     this.level.collectibles.splice(index, 1);
                     this.coinBar.setBarProgress(this.shark.coinCount);
                 }
@@ -67,6 +72,7 @@ class World {
             this.level.poison.forEach((poison, index) => {
                 if(this.shark.isColliding(poison)) {
                     this.shark.collectPoison();
+                    this.sound.play('flask');
                     this.level.poison.splice(index, 1);
                     this.poisonBar.setBarProgress(this.shark.poisonCount);
                 }
@@ -74,6 +80,7 @@ class World {
             this.bubbles.forEach((bubble, bIndex) => {  
                 this.level.enemies.forEach((enemy, eIndex) => {
                     if(bubble.isColliding(enemy)) {
+                        this.sound.play('bubbleHit');
                         if(!enemy.endboss){
                             this.bubbles.splice(bIndex, 1);
                             enemy.energy -= 20;
@@ -92,6 +99,7 @@ class World {
                             }
                         } else if (enemy.endboss ) {
                             this.bubbles.splice(bIndex, 1);
+                            this.sound.play('bossHit');
                             if(bubble.poisonous){
                                 enemy.hit();
                                 enemy.healthbar.setHealth(enemy.energy);
@@ -198,9 +206,21 @@ class World {
                     document.getElementById("endscreen-title").innerText = "Game Over!";
                     document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
                     clearInterval(this.endscreenInterval);
-                }
+                }    
+                this.playendcondtionSound();     
+                world.pause();       
             }
         }, 1000);
+    }
+
+    playendcondtionSound() {
+        if (this.shark.energy <= 0) {
+            this.sound.stop('gameMusic');
+            this.sound.play('gameOver');
+        } else {
+            this.sound.stop('gameMusic');
+            this.sound.play('gameWon');
+        }
     }
     
 }
