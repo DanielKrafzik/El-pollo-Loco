@@ -1,9 +1,28 @@
 class SoundManager {
     sounds = {};
     muted = false;
+    volume = 1;
 
     constructor() {
         this.load();
+
+        const savedVolume = localStorage.getItem("volume");
+        if (savedVolume !== null) {
+            this.volume = parseFloat(savedVolume);
+        }
+        this.applyVolume();
+    }
+
+    applyVolume() {
+        Object.values(this.sounds).forEach(sound => {
+            sound.volume = (sound.baseVolume ?? 1) * this.volume;
+        });
+    }
+
+    setVolume(value) {
+        this.volume = value;
+        localStorage.setItem("volume", value);
+        this.applyVolume();
     }
 
     load() {
@@ -22,13 +41,13 @@ class SoundManager {
             startMusic: new Audio('./audio/start_screen_music.wav')
         };
 
-        this.sounds.startMusic.volume = 0.5;
-        this.sounds.gameMusic.volume = 1;
-        this.sounds.flask.volume = 0.5;
-        this.sounds.sharkHit.volume = 0.7;
-        this.sounds.gameWon.volume = 0.5;   
-        this.sounds.orcaAttack.volume = 0.5;
-        this.sounds.bubbleHit.volume = 0.5;
+        this.sounds.startMusic.baseVolume = 0.5;
+        this.sounds.gameMusic.baseVolume = 1;
+        this.sounds.flask.baseVolume = 0.5;
+        this.sounds.sharkHit.baseVolume = 0.7;
+        this.sounds.gameWon.baseVolume = 0.5;   
+        this.sounds.orcaAttack.baseVolume = 0.5;
+        this.sounds.bubbleHit.baseVolume = 0.5;
 
         this.sounds.gameMusic.loop = true;
         this.sounds.startMusic.loop = true;

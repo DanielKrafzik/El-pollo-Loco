@@ -15,7 +15,19 @@ function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);    
     world.pause();
-    
+    setupVolumeSlider();
+}
+
+function setupVolumeSlider() {
+    const volumeSlider = document.getElementById("volume-slider");
+    if (!volumeSlider) return;
+
+    volumeSlider.value = world.sound.volume * 100;
+
+    volumeSlider.addEventListener("input", (e) => {
+        const volume = e.target.value / 100;
+        world.sound.setVolume(volume);
+    });
 }
 
 window.addEventListener('keydown', (event) => {

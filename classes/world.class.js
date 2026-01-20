@@ -135,7 +135,7 @@ class World {
         this.addToMap(this.coinBar);
         this.addToMap(this.poisonBar);
         if(this.level.enemies[14]){
-            if(!this.level.enemies[14].triggered) this.addToMap(this.level.enemies[14].healthbar);
+            if(this.level.enemies[14].triggered) this.addToMap(this.level.enemies[14].healthbar);
         }
 
         this.ctx.translate(this.camera_x, 0);

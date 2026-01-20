@@ -178,10 +178,21 @@ canvas {
     outline: none;
 }
 
-#volume-slider {
+#volume-div {
     position: absolute;
-    top: 5%;
+    bottom: 5%;
     left: 5%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+#volume-slider {
     width: 150px;
     height: 25px;
     cursor: pointer;
