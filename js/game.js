@@ -5,6 +5,9 @@ let keyboard = new Keyboard();
 
 document.getElementById("play-btn").addEventListener("click", (e) => {
     e.stopPropagation();
+    if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock("landscape").catch(() => {});
+    }
     musicCondition = false;
     document.getElementById("start-screen").style.display = "none";
     world.resume();
@@ -73,18 +76,16 @@ window.addEventListener('keyup', (event) => {
 });
 
 document.getElementById("fullscreen-btn").addEventListener("click", () => {
-    const canvas = document.getElementById("canvas");
+    const wrapper = document.getElementById("game-wrapper");
 
     if (!document.fullscreenElement) {
-        canvas.requestFullscreen();
+        wrapper.requestFullscreen();
     } else {
         document.exitFullscreen();
     }
 });
 
 document.addEventListener("fullscreenchange", () => {
-    console.log(world);
-    
     if (!world) return;
 
     if (document.fullscreenElement) {
@@ -93,7 +94,6 @@ document.addEventListener("fullscreenchange", () => {
         world.resize(960, 540);
     }
 });
-
 
 document.getElementById("controls-btn").addEventListener("click", () => {
     document.getElementById("controls-screen").style.display = "flex";
@@ -153,6 +153,11 @@ window.addEventListener("load", () => {
         document.getElementById("start-screen").style.display = "none";
         sessionStorage.removeItem("skipStart");
         init();
+        if (isMobile()) {
+            world.resize(window.innerWidth, window.innerHeight);
+        } else {
+            world.resize(960, 540);
+        }
         world.resume();
         world.sound.stop('startMusic');
         world.sound.play('gameMusic');
@@ -166,3 +171,22 @@ document.addEventListener("click", () => {
 if (sessionStorage.getItem("skipStart") === "true") {
     musicCondition = false;
 }
+
+function isMobile() {
+    return window.innerWidth < 900 || window.innerHeight < 600;
+}
+
+window.addEventListener("touchstart", (e) => {
+    const x = e.touches[0].clientX;
+    const y = e.touches[0].clientY;
+
+    if (x < window.innerWidth / 2) keyboard.LEFT = true;
+    else keyboard.RIGHT = true;
+
+    if (y < window.innerHeight / 2) keyboard.UP = true;
+    else keyboard.DOWN = true;
+});
+
+window.addEventListener("touchend", () => {
+    keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = false;
+});
