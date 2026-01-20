@@ -15,7 +15,7 @@ class SoundManager {
             gameMusic: new Audio('./audio/game_music.wav'),
             gameOver: new Audio('./audio/game_over.wav'),
             gameWon: new Audio('./audio/game_won.wav'),
-            bossHit: new Audio('./audio/hit_orca.wav'),
+            bossHit: new Audio('./audio/hit_orca.ogg'),
             sharkHit: new Audio('./audio/hit_shark.ogg'),
             boss: new Audio('./audio/orca_apperance.flac'),
             orcaAttack: new Audio('./audio/orca_bite.wav'),
@@ -28,6 +28,7 @@ class SoundManager {
         this.sounds.sharkHit.volume = 0.7;
         this.sounds.gameWon.volume = 0.5;   
         this.sounds.orcaAttack.volume = 0.5;
+        this.sounds.bubbleHit.volume = 0.5;
 
         this.sounds.gameMusic.loop = true;
         this.sounds.startMusic.loop = true;
