@@ -111,7 +111,8 @@ class Endboss extends MovableObject {
                 }
             }
         }, 1000 / 60);    
-        setInterval(() => {
+        if (this.endbossMoveInterval) return;
+        this.endbossMoveInterval = setInterval(() => {
             if (this.world.isPaused) return;
             if(this.triggered && this.energy > 0) {
                 this.moveTowardsShark();   

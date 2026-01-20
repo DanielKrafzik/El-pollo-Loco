@@ -188,7 +188,7 @@ class Enemies extends MovableObject {
             left: left
         };
 
-        this.x = 500 + Math.random() * 3500;
+        this.x = 500 + Math.random() * 3200;
         this.y = 50 + Math.random() * 250;
         this.speed = 0.15 + Math.random() * 0.5;
         this.loadImages(this.IMAGES_SWIMMING_PUFFER);  
