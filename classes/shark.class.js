@@ -148,7 +148,91 @@ class Shark extends MovableObject {
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
 
-        setInterval(() => {
+        this.bubbleInterval = setInterval(() => {
+            if (this.world.isPaused) return;
+
+            if (this.isBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_BUBBLES);
+
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+                    this.world.sound.play('bubble');
+                    this.isBubbleAnimating = false;
+                    this.animationFinished = false;
+                    this.restCounter = 0;
+                }
+            }
+
+            if (this.isPoisonBubbleAnimating) {
+                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
+
+                if (this.animationFinished) {
+                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
+                    this.poisonCount--;
+                    this.world.poisonBar.setBarProgress(this.poisonCount);
+                    this.isPoisonBubbleAnimating = false;
+                    this.animationFinished = false;
+                    this.restCounter = 0;
+                }
+            }
+        }, 100);
+
+        this.animationInterval = setInterval(() => {
+            if (this.world.isPaused) return;
+
+            this.restCounter++;
+
+            if (this.isBubbleAnimating || this.isPoisonBubbleAnimating) {
+                return;
+            }
+
+            if (this.isDead()) {
+                this.playAnimation(this.IMAGES_DEAD);
+                return;
+            }
+
+            if (this.world.hitTimePassed(this)) {
+                this.playAnimation(this.IMAGES_HURT);
+                return;
+            }
+
+            if (
+                this.world.keyboard.RIGHT ||
+                this.world.keyboard.LEFT ||
+                this.world.keyboard.UP ||
+                this.world.keyboard.DOWN
+            ) {
+                this.playAnimation(this.IMAGES_SWIMMING);
+                this.restCounter = 0;
+                return;
+            }
+
+            if (this.restCounter > 50) {
+                this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
+                return;
+            }
+
+            this.playAnimation(this.IMAGES_WAITING);
+
+            if (this.world.keyboard.D && !this.isBubbleAnimating) {
+                this.isBubbleAnimating = true;
+                this.animationFinished = false;
+                this.currentImage = 0;
+            }
+
+            if (
+                this.world.keyboard.SPACE &&
+                !this.isPoisonBubbleAnimating &&
+                this.poisonCount > 0
+            ) {
+                this.isPoisonBubbleAnimating = true;
+                this.animationFinished = false;
+                this.currentImage = 0;
+            }
+
+        }, 250);
+
+/*        setInterval(() => {
             if (this.world.isPaused) return;
             this.restCounter++;
             if (this.isBubbleAnimating) {
@@ -200,7 +284,7 @@ class Shark extends MovableObject {
                 this.animationFinished = false;
                 this.currentImage = 0;
             }
-        }, this.isBubbleAnimating ? 40 : 250);    
+        }, this.isBubbleAnimating ? 40 : 250);    */
     }
 
     shootBubble(bubbleImg) {

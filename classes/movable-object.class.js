@@ -12,7 +12,6 @@ class MovableObject extends DrawableObject {
 
     bubbleRise() {
         setInterval(() => {
-            if (!this.world || this.world.isPaused) return;
                 this.y += this.speedY;
                 this.speedY -= this.acceleration;
         }, 1000 / 60);
