@@ -178,6 +178,15 @@ canvas {
     outline: none;
 }
 
+#volume-slider {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 150px;
+    height: 25px;
+    cursor: pointer;
+}
+
 /* Game Description*/
 
 #start-content,
