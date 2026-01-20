@@ -22,6 +22,13 @@ class SoundManager {
             startMusic: new Audio('./audio/start_screen_music.wav')
         };
 
+        this.sounds.startMusic.volume = 0.5;
+        this.sounds.gameMusic.volume = 1;
+        this.sounds.flask.volume = 0.5;
+        this.sounds.sharkHit.volume = 0.7;
+        this.sounds.gameWon.volume = 0.5;   
+        this.sounds.orcaAttack.volume = 0.5;
+
         this.sounds.gameMusic.loop = true;
         this.sounds.startMusic.loop = true;
     }

@@ -1,12 +1,14 @@
 let canvas;
 let world;
+let musicCondition = true;
 let keyboard = new Keyboard();
 
-document.getElementById("play-btn").addEventListener("click", () => {
+document.getElementById("play-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    musicCondition = false;
     document.getElementById("start-screen").style.display = "none";
     world.resume();
     world.sound.play('gameMusic');
-    world.sound.stop('startMusic');
 });
 
 function init() {
@@ -144,3 +146,11 @@ window.addEventListener("load", () => {
         world.sound.play('gameMusic');
     }
 });
+
+document.addEventListener("click", () => {
+    if (musicCondition) world.sound.play('startMusic'); 
+}, { once: true });
+
+if (sessionStorage.getItem("skipStart") === "true") {
+    musicCondition = false;
+}

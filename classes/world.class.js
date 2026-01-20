@@ -18,7 +18,6 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.sound.play('startMusic');
         this.draw();
         this.checkCollisions();
         this.connectWorldToObjects();
@@ -45,6 +44,7 @@ class World {
 
     resume() {
         this.isPaused = false;
+        this.sound.stop('startMusic');
     }
 
     checkCollisions() {        
