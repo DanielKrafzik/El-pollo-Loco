@@ -91,7 +91,8 @@ canvas {
 #controls-screen,
 #start-content,
 #legal-notice,
-#endscreen {
+#endscreen,
+#impressum {
     position: absolute;
     inset: 0; 
     background-image: url('./assets/3_game_background.png');
@@ -161,7 +162,8 @@ canvas {
 #return-btn,
 #close-legal-btn,
 #restart-btn,
-#menu-btn {
+#menu-btn,
+#close-impressum {
     width: 200px;
     height: 60px;
     font-family: 'LuckiestGuy', sans-serif;
@@ -181,10 +183,24 @@ canvas {
 #legal-btn:hover,
 #close-legal-btn:hover,
 #restart-btn:hover,
-#menu-btn:hover {
+#menu-btn:hover,
+#close-impressum:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
     cursor: pointer;
+}
+
+#impressum p,
+#legal-notice p,
+#start-content p {
+    width: 80%;
+    text-align: center;
+}
+
+#impressum button,
+#legal-notice button,
+#start-content button {
+    margin-bottom: 20px;
 }
 
 .start-btn {
@@ -227,11 +243,10 @@ canvas {
 /* Game Description*/
 
 #start-content,
-#legal-notice{
+#legal-notice,
+#impressum {
     overflow-y: auto;
-    padding: 25px 25px 25px 25px;
     margin: 0 auto;
-    padding: 60px 40px 80px;
 }
 
 #start-content h1 {
@@ -265,6 +280,26 @@ canvas {
     color: white;
     list-style-type: none;
     border-radius: 5px;
+}
+
+/* Impressum */
+
+#impressum-btn {
+    position: absolute;
+    bottom: 20%;
+    right: 5%;
+    width: 200px;
+    height: 50px;
+    font-family: 'LuckiestGuy', sans-serif;
+    color: rgb(83, 26, 130);
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 10px;
 }
 
 /* Legal Notice */
@@ -370,7 +405,8 @@ canvas {
         left: 10%;
     }
 
-    #legal-btn {
+    #legal-btn,
+    #impressum-btn {
         right: 10%;
     }
 
@@ -409,7 +445,8 @@ canvas {
     }
 
     #start-content,
-    #legal-notice{
+    #legal-notice,
+    #impressum {
         padding: 0;
     }
 
@@ -419,20 +456,23 @@ canvas {
     }
 
     #start-content h2,
-    #legal-notice h2 {
+    #legal-notice h2,
+    #impressum h2 {
         font-size: 20px;
     }
 
     #start-content p,
     #legal-notice p,
-    #legal-notice ul {
+    #legal-notice ul,
+    #impressum p {
         font-size: 16px;
         margin-right: 50px;
         margin-left: 50px;
     }
 
     #start-content button,
-    #legal-notice button {
+    #legal-notice button,
+    #impressum button {
         margin-bottom: 25px;
     }
 
@@ -447,6 +487,14 @@ canvas {
     #endscreen button {
         width: 125px;
         font-size: 20px;
+    }
+
+    #impressum h1 {
+        font-size: 24px;
+    }
+
+    #impressum p {
+        display: inline;
     }
 }
 

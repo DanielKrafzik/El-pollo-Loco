@@ -123,6 +123,14 @@ document.getElementById("close-legal-btn").addEventListener("click", () => {
     document.getElementById("legal-notice").style.display = "none";
 });
 
+document.getElementById("close-impressum").addEventListener("click", () => {
+    document.getElementById("impressum").style.display = "none";
+});
+
+document.getElementById("impressum-btn").addEventListener("click", () => {
+    document.getElementById("impressum").style.display = "flex";
+});
+
 document.getElementById("pause-btn").addEventListener("click", () => {
     world.togglePause();
     if (document.getElementById("pause-btn-img").src.includes("play")) {
