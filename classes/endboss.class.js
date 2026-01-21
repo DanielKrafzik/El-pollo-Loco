@@ -78,15 +78,105 @@ class Endboss extends MovableObject {
         this.world = null;
     }   
 
+    /**
+     * Sets the world instance for this endboss and initiates animation.
+     * @param {World} world - The world instance to associate with this endboss
+     * @returns {void}
+     */
     setWorld(world) {
         this.world = world;
         this.animate();  
     }
 
+    /**
+     * Initializes the end boss's behavior and animations.
+     *
+     * This method starts all main aspects of the end boss:
+     * 
+     * - Calls `endbossActions()` to handle attacks, hits, and animation states.
+     * - Calls `endbossApperance()` to manage the boss's introduction and swimming animations.
+     * - Starts continuous movement with `endbossMovement()` if it has not already been started.
+     *
+     * @method animate
+     */
     animate() {
+        this.endbossActions();
+        this.endbossApperance();    
+        if (this.endbossMoveInterval) return;
+        this.endbossMovement();
+    }
+
+    /**
+     * Controls the continuous movement of the end boss towards the shark.
+     *
+     * Sets up a repeating interval (60 times per second) to update the boss's
+     * position:
+     * 
+     * - Skips movement updates if the game is paused.
+     * - If the boss is triggered and still has energy, it moves towards the
+     *   shark using `moveTowardsShark()`.
+     *
+     * @method endbossMovement
+     */
+    endbossMovement() {
+        this.endbossMoveInterval = setInterval(() => {
+            if (this.world.isPaused) return;
+            if (this.triggered && this.energy > 0) {
+                this.moveTowardsShark();
+            }
+        }, 1000 / 60);
+    }
+
+    /**
+     * Handles the appearance and entrance animation of the end boss.
+     *
+     * Sets up a repeating interval (60 times per second) to manage the boss's
+     * introduction sequence and swimming animation:
+     * 
+     * - Checks if the game is paused and skips updates if so.
+     * - Triggers the boss when the shark reaches a certain x-position (3200).
+     * - While triggered, plays the introduction animation until it finishes,
+     *   including playing the boss sound.
+     * - After the introduction animation completes, continuously updates the
+     *   boss's swimming animation.
+     *
+     * @method endbossApperance
+     */
+    endbossApperance() {
+        this.endbossSwimmingInterval = setInterval(() => {
+            if (this.world.isPaused) return;
+            if (this.world.shark.x >= 3200)this.triggered = true;            
+            if (this.triggered) {
+                if (!this.animationFinished) {
+                    this.updateAnimation(this.IMAGES_INTRODUCTION, null, 120);
+                    this.world.sound.play('boss');
+                } else {
+                    this.updateAnimation(this.IMAGES_SWIMMING, null, 120);
+                }
+            }
+        }, 1000 / 60);
+    }
+
+    /**
+     * Controls the end boss's actions in the game at regular intervals.
+     *
+     * This function sets up a repeating interval (every 250ms) to manage the
+     * end boss behavior based on its state and the game world:
+     * 
+     * - Plays the "hurt" animation if the boss has recently been hit.
+     * - Plays the "swimming" animation if the boss is alive, triggered, has
+     *   been hit enough times, and the previous animation has finished.
+     * - Plays the "attack" animation and increments the hit counter if the
+     *   boss is triggered but hasn't reached the required number of hits,
+     *   also plays an attack sound.
+     * - Skips any action if the game is paused.
+     *
+     * @method endbossActions
+     */
+    endbossActions() {
         setInterval(() => {
             if (this.world.isPaused) return;
-            if(this.world.hitTimePassed(this)){ 
+            if (this.world.hitTimePassed(this)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.energy > 0 && this.triggered && this.endbossHitCounter >= 6 && this.animationFinished) {
                 this.playAnimation(this.IMAGES_SWIMMING);
@@ -96,30 +186,21 @@ class Endboss extends MovableObject {
                 this.world.sound.play('orcaAttack');
             }
         }, 250);
-        this.endbossSwimmingInterval = setInterval(() => {
-            if (this.world.isPaused) return;
-            if(this.world.shark.x >= 3200) {
-                
-                this.triggered = true;
-            }
-            if(this.triggered) {
-                if (!this.animationFinished) {
-                    this.updateAnimation(this.IMAGES_INTRODUCTION, null, 120);
-                    this.world.sound.play('boss');
-                } else {
-                    this.updateAnimation(this.IMAGES_SWIMMING, null, 120);
-                }
-            }
-        }, 1000 / 60);    
-        if (this.endbossMoveInterval) return;
-        this.endbossMoveInterval = setInterval(() => {
-            if (this.world.isPaused) return;
-            if(this.triggered && this.energy > 0) {
-                this.moveTowardsShark();   
-            }
-        }, 1000 / 60);
     }
 
+    /**
+     * Updates the animation state based on a time interval.
+     *
+     * Ensures that animations are played at a controlled speed by checking
+     * the elapsed time since the last animation update. If enough time has
+     * passed, the given animations are played once.
+     *
+     * @param {Array|string} animation1 - The primary animation or animation frames.
+     * @param {Array|string} animation2 - The secondary animation or fallback animation.
+     * @param {number} [speed=120] - Minimum time in milliseconds between animation updates.
+     *
+     * @method updateAnimation
+     */
     updateAnimation(animation1, animation2, speed = 120) {
         if (!this.lastAnimTime) this.lastAnimTime = 0;
 
@@ -134,11 +215,24 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Moves the boss character towards the shark's position.
+     *
+     * The boss adjusts its horizontal movement based on the shark's x-position
+     * and flips its direction accordingly. Vertically, it aligns itself with
+     * the shark's hitbox while respecting an upper movement limit.
+     *
+     * - Moves left or right depending on the shark's x-coordinate
+     * - Updates `otherDirection` to control sprite orientation
+     * - Moves up or down to follow the shark's vertical position
+     * - Prevents downward movement beyond a defined vertical boundary
+     *
+     * @method moveTowardsShark
+     */
     moveTowardsShark() {
         const shark = this.world.shark;
         const bossHitboxY = this.y + this.offset.top; 
         const sharkHitboxY = shark.y + shark.offset.top;
-
         if (shark.x < this.x) {
             this.otherDirection = false;
             this.x -= this.speed;
@@ -151,6 +245,14 @@ class Endboss extends MovableObject {
         if (sharkHitboxY > bossHitboxY && this.y < 200) this.y += this.speed;    
     }
 
+    /**
+     * Plays the death animation for the endboss.
+     * Sets the isDead flag to true and cycles through the IMAGES_DEAD array
+     * at a frame rate of 6 FPS (1000ms / 6 frames).
+     * 
+     * @function endbossDyingAnimation
+     * @returns {void}
+     */
     endbossDyingAnimation() {
         this.isDead = true;
         this.currentImage = 0;

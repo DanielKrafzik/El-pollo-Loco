@@ -17,6 +17,12 @@ class PoisonBar extends DrawableObject {
         this.width = 200;
         this.height = 60;
     }
+
+    /**
+     * Sets the poison counter bar progress by updating the displayed image.
+     * @param {number} counter - The poison counter value used as an index to retrieve the corresponding image from the IMAGES_POISON array.
+     * @returns {void}
+     */
     setBarProgress(counter) {
         this.img = this.imageCache[this.IMAGES_POISON[counter]];
     }

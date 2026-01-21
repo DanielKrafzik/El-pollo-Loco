@@ -13,6 +13,11 @@ class Bubble extends MovableObject{
         this.bubbleRise();
     }
 
+    /**
+     * Animates the bubble movement by continuously updating its horizontal position.
+     * The bubble moves left or right based on the {@link goingLeft} property at a rate
+     * determined by the {@link speed} property. The animation runs at approximately 60 FPS.
+     */
     animate(){
         setInterval(() => {
             if (this.goingLeft){

@@ -574,13 +574,13 @@ canvas {
 #mobile-movement {
     position: absolute;
     bottom: 2%;
-    left: 10%;
+    left: 2%;
 }
 
 #mobile-actions {
     position: absolute;
     bottom: 2%;
-    right: 10%;
+    right: 2%;
 }
 
 #up-div,

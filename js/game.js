@@ -17,6 +17,14 @@ document.getElementById("play-btn").addEventListener("click", (e) => {
     world.sound.play('gameMusic');
 });
 
+/**
+ * Initializes the game environment.
+ *
+ * - Retrieves the canvas element and creates a new `World` instance with it and the keyboard controls.
+ * - Immediately pauses the world after creation.
+ * - Sets up the volume slider for sound control.
+ * - Checks the device orientation and displays a rotate hint if necessary.
+ */
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);    
@@ -25,6 +33,14 @@ function init() {
     checkOrientation();
 }
 
+/**
+ * Initializes the volume slider for controlling the game's sound volume.
+ *
+ * - Sets the slider's initial value based on the current volume of `world.sound`.
+ * - Adds an "input" event listener to update the game's sound volume in real-time as the slider is moved.
+ *
+ * Requires a global `world` object with a `sound` property that has `volume` and `setVolume` methods.
+ */
 function setupVolumeSlider() {
     const volumeSlider = document.getElementById("volume-slider");
     if (!volumeSlider) return;
@@ -182,6 +198,10 @@ if (sessionStorage.getItem("skipStart") === "true") {
     musicCondition = false;
 }
 
+/**
+ * Determines if the device is considered mobile based on viewport dimensions.
+ * @returns {boolean} True if the viewport width is less than 900px or height is less than 600px, false otherwise.
+ */
 function isMobile() {
     return window.innerWidth < 900 || window.innerHeight < 600;
 }
@@ -201,6 +221,16 @@ window.addEventListener("touchend", () => {
     keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = false;
 });
 
+/**
+ * Checks the current device orientation and displays a rotation hint if the device is in portrait mode.
+ * Pauses the game world if a global `world` object exists.
+ *
+ * - If the device is in portrait mode (`window.innerHeight > window.innerWidth`), the element with
+ *   ID "rotate-hint" is displayed and the game is paused.
+ * - If the device is in landscape mode, the "rotate-hint" element is hidden.
+ *
+ * This function is typically called on window resize or orientation change events.
+ */
 function checkOrientation() {
     const isPortrait = window.innerHeight > window.innerWidth;
 
@@ -217,24 +247,23 @@ function checkOrientation() {
 window.addEventListener("resize", checkOrientation);
 window.addEventListener("orientationchange", checkOrientation);
 
-function isMobile() {
-    return window.matchMedia("(pointer: coarse)").matches;
-}
-
+/**
+ * Binds touch events to a mobile button element and updates keyboard state
+ * @param {string} id - The HTML element ID of the button to bind
+ * @param {string} key - The keyboard key name to update in the keyboard object
+ * @returns {void}
+ */
 function bindMobileButton(id, key) {
     const btn = document.getElementById(id);
     if (!btn) return;
-
     btn.addEventListener("touchstart", e => {
         e.preventDefault();
         keyboard[key] = true;
     });
-
     btn.addEventListener("touchend", e => {
         e.preventDefault();
         keyboard[key] = false;
     });
-
     btn.addEventListener("touchcancel", () => {
         keyboard[key] = false;
     });
@@ -244,6 +273,5 @@ bindMobileButton("btn-left", "LEFT");
 bindMobileButton("btn-right", "RIGHT");
 bindMobileButton("btn-up", "UP");
 bindMobileButton("btn-down", "DOWN");
-
 bindMobileButton("btn-attack", "D");
 bindMobileButton("btn-poison", "SPACE");

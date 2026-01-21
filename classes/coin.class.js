@@ -17,6 +17,14 @@ class Coin extends DrawableObject {
         this.animate();
     }
 
+    /**
+     * Starts the coin animation by periodically updating the coin's image.
+     * The animation cycles through the available coin sizes every 250 milliseconds.
+     * If the world is paused, the animation does not update.
+     *
+     * @function
+     * @memberof Coin
+     */
     animate() {
         setInterval(() => {
             if (this.world.isPaused) return;

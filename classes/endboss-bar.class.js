@@ -18,6 +18,10 @@ class Endbosshealthbar extends DrawableObject {
         this.setHealth(60);
     }
 
+    /**
+     * Sets the health value and updates the displayed health bar image accordingly.
+     * @param {number} health - The new health value to set
+     */
     setHealth(health) {
         this.health = health;
         let imagePath= this.IMAGES[this.resolveImageIndex()];
@@ -25,6 +29,14 @@ class Endbosshealthbar extends DrawableObject {
     }
 
 
+    /**
+     * Resolves the appropriate health bar image index based on the current health value.
+     * @returns {number} The image index (0-3) corresponding to the health level.
+     *                   - 3: health == 60 (full health)
+     *                   - 2: health >= 40 (medium-high health)
+     *                   - 1: health >= 20 (low health)
+     *                   - 0: health < 20 (critical health)
+     */
     resolveImageIndex() {
         if (this.health == 60) {
             return 3;

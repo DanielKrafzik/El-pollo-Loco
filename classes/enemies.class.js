@@ -6,8 +6,6 @@ class Enemies extends MovableObject {
     colorIndex;
     isDead = false;
     world;
-
-    //PUFFER FISH IMAGES
     IMAGES_SWIMMING_PUFFER = [
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim2.png',
@@ -86,8 +84,6 @@ class Enemies extends MovableObject {
         'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/3.3.png',
         'img/2.Enemy/1.Puffer fish (3 color options)/4.DIE/3.2.png'
     ];
-
-    //YELLY FISH IMAGES
     IMAGES_SWIMMING_YELLY = [
         'img/2.Enemy/2 Jelly fish/Regular damage/Yellow 1.png',
         'img/2.Enemy/2 Jelly fish/Regular damage/Yellow 2.png',
@@ -136,8 +132,6 @@ class Enemies extends MovableObject {
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P3.png',
         'img/2.Enemy/2 Jelly fish/Dead/Pink/P4.png'
     ];
-
-    //Puffer fish animation arrays
     pufferColorAnimations = [
         this.IMAGES_SWIMMING_PUFFER, 
         this.IMAGES_SWIMMING_PUFFER2, 
@@ -158,8 +152,6 @@ class Enemies extends MovableObject {
         this.IMAGES_DYING_PUFFER2,
         this.IMAGES_DYING_PUFFER3
     ];
-
-    //Jelly fish animation arrays
     jellyColorAnimations = [
         this.IMAGES_SWIMMING_YELLY,
         this.IMAGES_SWIMMING_YELLY2
@@ -178,8 +170,7 @@ class Enemies extends MovableObject {
     ];
 
     constructor(startImage, top, right, bottom, left, currentColor) {
-        super().loadImage(startImage);
-        
+        super().loadImage(startImage);        
         this.colorIndex = currentColor;
         this.offset = {
             top: top,
@@ -187,7 +178,6 @@ class Enemies extends MovableObject {
             bottom: bottom,
             left: left
         };
-
         this.x = 500 + Math.random() * 3200;
         this.y = 50 + Math.random() * 250;
         this.speed = 0.15 + Math.random() * 0.5;
@@ -220,22 +210,25 @@ class Enemies extends MovableObject {
         }
     }
 
-    //PUFFER FISH ANIMATIONS
+    /**
+     * Animates the puffer fish with a normal animation followed by a transition animation.
+     * Clears any existing animation interval and sets up a new one that cycles through
+     * animation frames at 6 FPS. After a random duration between 2-3 seconds, transitions
+     * to the transition animation.
+     * 
+     * @param {string} currentColor - The current color of the puffer fish to be used in animations
+     * @returns {void}
+     */
     animatePuffer(currentColor) {
         if (this.isDead) return;
-        clearInterval(this.normalPufferAnimationInterval);
-    
-
+        clearInterval(this.normalPufferAnimationInterval);   
         this.currentImage = 0;
         this.offset.bottom = 30; 
         this.offset.top = 10;
-
         this.normalPufferAnimationInterval = setInterval(() => {            
-            if (this.world.isPaused) return;  
-                               
+            if (!this.world ||this.world.isPaused) return;                                 
             this.normalPufferAnimation(currentColor);
         }, 1000 / 6);
-
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.normalPufferAnimationInterval);
@@ -243,7 +236,12 @@ class Enemies extends MovableObject {
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
-
+    /**
+     * Plays the swimming animation for a normal puffer fish based on its color.
+     * Updates the current image of the puffer fish from the cached frames.
+     *
+     * @param {number} currentColor - The index or key representing the current color of the puffer fish.
+     */
     normalPufferAnimation(currentColor) {
         if (this.isDead) return;
         let frames = this.pufferColorAnimations[currentColor];
@@ -252,21 +250,18 @@ class Enemies extends MovableObject {
         this.currentImage++;
     }
 
-
+    /**
+     * Handles the transition animation for a puffer fish when changing to a new color.
+     * Resets the current image, triggers the color change, and after a short delay
+     * starts the bubble swim animation for the new color.
+     *
+     * @param {number} currentColor - The index or key representing the new color of the puffer fish.
+     */
     transitionPufferAnimation(currentColor) {
         if (this.isDead) return;
         clearInterval(this.transitionPufferAnimationInterval);
-
         this.currentImage = 0;
-
-        this.transitionPufferAnimationInterval = setInterval(() => {
-            if (this.world.isPaused) return;
-            let frames = this.pufferTransitionAnimations[currentColor];
-            let i = this.currentImage % frames.length;
-            this.img = this.imageCache[frames[i]];
-            this.currentImage++;
-        }, 1000 / 6);
-
+        this.pufferColorChange(currentColor);
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.transitionPufferAnimationInterval);
@@ -274,23 +269,38 @@ class Enemies extends MovableObject {
         }, 833);
     }
 
-
-    bubbleSwimAnimation(currentColor) {
-        if (this.isDead) return;
-        clearInterval(this.bubbleSwimInterval);
-
-        this.currentImage = 0;
-        this.offset.bottom = 0; 
-        this.offset.top = 0;
-
-        this.bubbleSwimInterval = setInterval(() => {
+    /**
+     * Starts the transition animation for a puffer fish changing to a new color.
+     * Cycles through the frames of the transition animation at 6 frames per second
+     * and updates the fish's image accordingly.
+     *
+     * @param {number} currentColor - The index or key representing the new color of the puffer fish.
+     */
+    pufferColorChange(currentColor) {
+        this.transitionPufferAnimationInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            let frames = this.bubbleSwimAnimations[currentColor];
+            let frames = this.pufferTransitionAnimations[currentColor];
             let i = this.currentImage % frames.length;
             this.img = this.imageCache[frames[i]];
             this.currentImage++;
         }, 1000 / 6);
+    }
 
+    /**
+     * Initiates the "bubble swim" animation for a puffer fish of a specific color.
+     * Resets animation state, applies color-specific bubble swim, and after a random
+     * duration between 2000ms and 3000ms, transitions the puffer fish back using 
+     * `transitionPufferAnimationReverse`.
+     *
+     * @param {number} currentColor - The index or key representing the current color of the puffer fish.
+     */
+    bubbleSwimAnimation(currentColor) {
+        if (this.isDead) return;
+        clearInterval(this.bubbleSwimInterval);
+        this.currentImage = 0;
+        this.offset.bottom = 0; 
+        this.offset.top = 0;
+        this.bubbleSwimColor(currentColor);
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.bubbleSwimInterval);
@@ -298,10 +308,33 @@ class Enemies extends MovableObject {
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
+    /**
+     * Starts the bubble swim animation for a puffer fish of a specific color.
+     * Cycles through the color-specific animation frames at a rate of 6 frames per second
+     * and updates the displayed image accordingly.
+     *
+     * @param {number} currentColor - The index or key representing the current color of the puffer fish.
+     */
+    bubbleSwimColor(currentColor) {
+        this.bubbleSwimInterval = setInterval(() => {
+            if (this.world.isPaused) return;
+            let frames = this.bubbleSwimAnimations[currentColor];
+            let i = this.currentImage % frames.length;
+            this.img = this.imageCache[frames[i]];
+            this.currentImage++;
+        }, 1000 / 6);
+    }
+
+    /**
+     * Plays the puffer fish's transition animation in reverse for a given color.
+     * Cycles backward through the color-specific transition frames at 6 frames per second.
+     * After the reverse animation completes (833ms), it triggers the normal puffer animation.
+     *
+     * @param {number} currentColor - The index or key representing the current color of the puffer fish.
+     */
     transitionPufferAnimationReverse(currentColor) {
         if (this.isDead) return;
         clearInterval(this.transitionPufferAnimationReverseInterval);
-
         this.currentImage = this.pufferTransitionAnimations[currentColor].length - 1;
         this.transitionPufferAnimationReverseInterval = setInterval(() => {
             if (this.world.isPaused) return;
@@ -310,7 +343,6 @@ class Enemies extends MovableObject {
             this.img = this.imageCache[frames[i]];
             this.currentImage--;
         }, 1000 / 6);
-
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.transitionPufferAnimationReverseInterval);
@@ -318,6 +350,11 @@ class Enemies extends MovableObject {
         }, 833);
     }
 
+    /**
+     * Stops all current puffer fish animations and sets the fish into its dying state.
+     * Resets the animation frame to the first frame of the color-specific dying animation
+     * and marks the puffer fish as dead.
+     */
     dyingPufferAnimation() {
         this.isDead = true;
         clearInterval(this.normalPufferAnimationInterval);
@@ -325,23 +362,26 @@ class Enemies extends MovableObject {
         clearInterval(this.bubbleSwimInterval);
         clearInterval(this.transitionPufferAnimationReverseInterval);
         this.currentImage = 0;
-
         let path = this.dyingPufferAnimations[this.colorIndex][0];
         this.img = this.imageCache[path];
     }
 
-    //JELLY FISH ANIMATIONS
+    /**
+     * Animates the jellyfish of the specified color by cycling through its swimming frames.
+     * The animation interval runs at 6 frames per second. After a random duration between
+     * 2 and 3 seconds, the interval is cleared and the transition animation is triggered.
+     *
+     * @param {string|number} currentColor - The key or index representing the jellyfish's color.
+     */
     animateJelly(currentColor) {
         if (this.isDead) return;
         this.animateJellyInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            let i = this.currentImage % this.jellyColorAnimations[currentColor].length;
-            
+            let i = this.currentImage % this.jellyColorAnimations[currentColor].length;            
             let path = this.jellyColorAnimations[currentColor][i];
             this.img = this.imageCache[path];
             this.currentImage++;
         }, 1000 / 6);
-
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.animateJellyInterval);
@@ -349,10 +389,17 @@ class Enemies extends MovableObject {
         }, Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
+    /**
+     * Animates the jellyfish's transition sequence for the specified color.
+     * This method cycles through the transition frames at 6 frames per second.
+     * After a random duration between 2 and 3 seconds, the interval is cleared and
+     * the regular swimming animation (`animateJelly`) is restarted.
+     *
+     * @param {string|number} currentColor - The key or index representing the jellyfish's color.
+     */
     animateJellyTransition(currentColor) {
         if (this.isDead) return;
         this.currentImage = 0;
-
         this.animateJellyTransitionInterval = setInterval(() => {
             if (this.world.isPaused) return;
             let i = this.currentImage % this.jellyTransitionAnimations[currentColor].length;
@@ -360,7 +407,6 @@ class Enemies extends MovableObject {
             this.img = this.imageCache[path];
             this.currentImage++;
         }, 1000 / 6);
-
         setTimeout(() => {
             if (this.world.isPaused) return;
             clearInterval(this.animateJellyTransitionInterval);
@@ -368,20 +414,23 @@ class Enemies extends MovableObject {
         },Math.floor(Math.random() * (3000 - 2000 + 1)) + 2000);
     }
 
+    /**
+     * Plays the dying animation for the jellyfish enemy.
+     * Clears any ongoing swimming or transition animations and cycles through
+     * the appropriate dead animation frames at 6 frames per second.
+     * The dead animation array is chosen based on the enemy's current image color.
+     *
+     * @param {Object} enemy - The enemy object whose dying animation is triggered.
+     * @param {HTMLImageElement} enemy.img - The current image element of the enemy.
+     */
     animateJellyDying(enemy) {
         this.isDead = true;
         clearInterval(this.animateJellyInterval);
         clearInterval(this.animateJellyTransitionInterval);
         this.currentImage = 0;
-
         let deadImgArray;
-
-        if(enemy.img.currentSrc.includes('Yellow')|| enemy.img.currentSrc.includes('Lila')){
-            deadImgArray = this.jellyDeadAnimations;
-        } else {
-            deadImgArray = this.jellyTransitionDeadAnimations;
-        }
-
+        if(enemy.img.currentSrc.includes('Yellow')|| enemy.img.currentSrc.includes('Lila')) deadImgArray = this.jellyDeadAnimations;
+        else deadImgArray = this.jellyTransitionDeadAnimations;        
         setInterval(() => {
             if (this.world.isPaused) return;
             let i = this.currentImage % deadImgArray[this.colorIndex].length;
@@ -390,5 +439,4 @@ class Enemies extends MovableObject {
             this.currentImage++;
         }, 1000 / 6);
     }
-
 }

@@ -123,170 +123,180 @@ class Shark extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Main animation loop for the shark character.
+     *
+     * This function handles the shark's movement, actions, and bubble attacks. It:
+     * - Calls `sharkMovement` to update the shark's position.
+     * - Sets up a recurring interval (every 100ms) to animate bubble attacks:
+     *   - Calls `sharkBubble` if a normal bubble is animating.
+     *   - Calls `sharkPoisonBubble` if a poisoned bubble is animating.
+     * - Calls `sharkActions` to execute additional shark behaviors.
+     *
+     * The bubble animation interval respects the world's paused state and will not execute while paused.
+     */
     animate() {        
-        setInterval(() => {            
-            if (this.world.isPaused) return;
-            if(this.world.keyboard.RIGHT && this.x < 3700){
-                this.x += this.speed;
-                this.otherDirection = false;
-            }
-            if(this.world.keyboard.LEFT && this.x > 100){
-                this.x -= this.speed;
-                this.otherDirection = true;
-            }
-            if(this.world.keyboard.UP && this.y > -100){
-                this.y -= this.speed;
-                this.rotation = -0.25;
-            }
-            if(this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height){
-                this.y += this.speed;
-                this.rotation = 0.25;
-            }
-            if (!this.world.keyboard.UP && !this.world.keyboard.DOWN){
-                this.rotation = 0;
-            }
-            this.world.camera_x = -this.x + 100;
-        }, 1000 / 60);
-
+        this.sharkMovement();
         this.bubbleInterval = setInterval(() => {
             if (this.world.isPaused) return;
-
-            if (this.isBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_BUBBLES);
-
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
-                    this.world.sound.play('bubble');
-                    this.isBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
-            }
-
-            if (this.isPoisonBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
-
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-                    this.poisonCount--;
-                    this.world.poisonBar.setBarProgress(this.poisonCount);
-                    this.isPoisonBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
-            }
+            if (this.isBubbleAnimating) this.sharkBubble();
+            if (this.isPoisonBubbleAnimating) this.sharkPoisonBubble();            
         }, 100);
 
+        this.sharkActions();
+    }
+
+    /**
+     * Handles the main animation and action loop for the shark character.
+     * Determines which animation to play based on the shark's state, user input, and world conditions.
+     * - Plays dead animation if the shark is dead.
+     * - Plays hurt animation if the shark was recently hit.
+     * - Plays swimming animation if movement keys are pressed.
+     * - Plays resting or sleeping animation if idle for a certain period.
+     * - Plays waiting animation otherwise.
+     * - Initiates bubble or poison bubble actions based on user input.
+     * The loop runs every 250ms and respects the world's paused state.
+     */
+    sharkActions() {
         this.animationInterval = setInterval(() => {
             if (this.world.isPaused) return;
-
             this.restCounter++;
-
-            if (this.isBubbleAnimating || this.isPoisonBubbleAnimating) {
-                return;
-            }
-
+            if (this.isBubbleAnimating || this.isPoisonBubbleAnimating) return;
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 return;
             }
-
             if (this.world.hitTimePassed(this)) {
                 this.playAnimation(this.IMAGES_HURT);
                 return;
             }
-
-            if (
-                this.world.keyboard.RIGHT ||
-                this.world.keyboard.LEFT ||
-                this.world.keyboard.UP ||
-                this.world.keyboard.DOWN
-            ) {
+            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
                 this.playAnimation(this.IMAGES_SWIMMING);
                 this.restCounter = 0;
                 return;
             }
-
             if (this.restCounter > 50) {
                 this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
                 return;
             }
-
             this.playAnimation(this.IMAGES_WAITING);
-
-            if (this.world.keyboard.D && !this.isBubbleAnimating) {
-                this.isBubbleAnimating = true;
-                this.animationFinished = false;
-                this.currentImage = 0;
-            }
-
-            if (
-                this.world.keyboard.SPACE &&
-                !this.isPoisonBubbleAnimating &&
-                this.poisonCount > 0
-            ) {
-                this.isPoisonBubbleAnimating = true;
-                this.animationFinished = false;
-                this.currentImage = 0;
-            }
-
+            if (this.world.keyboard.D && !this.isBubbleAnimating) this.startBubble();
+            if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) this.startPoisonBubble();
         }, 250);
-
-/*        setInterval(() => {
-            if (this.world.isPaused) return;
-            this.restCounter++;
-            if (this.isBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_BUBBLES);
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
-                    this.world.sound.play('bubble');
-                    this.isBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
-                return;
-            }
-            if (this.isPoisonBubbleAnimating) {
-                this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
-
-                if (this.animationFinished) {
-                    this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
-                    this.poisonCount--;
-                    this.world.poisonBar.setBarProgress(this.poisonCount);
-                    this.isPoisonBubbleAnimating = false;
-                    this.animationFinished = false;
-                    this.restCounter = 0;
-                }
-                return;
-            }
-            if(this.isDead()){
-                this.playAnimation(this.IMAGES_DEAD);
-                return;
-            } else if(this.world.hitTimePassed(this)){ 
-                this.playAnimation(this.IMAGES_HURT);
-            } else if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {                
-                this.playAnimation(this.IMAGES_SWIMMING);   
-                this.restCounter = 0;                
-            } else if(this.restCounter > 50) {
-                this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
-            }
-            else {
-                this.playAnimation(this.IMAGES_WAITING);                
-            }
-            if (this.world.keyboard.D && !this.isBubbleAnimating) {                
-                this.isBubbleAnimating = true;
-                this.animationFinished = false;
-                this.currentImage = 0;
-                
-            }
-            if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) {
-                this.isPoisonBubbleAnimating = true;
-                this.animationFinished = false;
-                this.currentImage = 0;
-            }
-        }, this.isBubbleAnimating ? 40 : 250);    */
     }
 
+    /**
+     * Initiates the bubble animation for the shark.
+     * Sets the animation state to active and resets the animation sequence.
+     */
+    startBubble() {
+        this.isBubbleAnimating = true;
+        this.resetAnimation();
+    }
+
+    /**
+     * Initiates the poison bubble animation for the shark.
+     * Sets the animation state to active and resets the animation sequence.
+     */
+    startPoisonBubble() {
+        this.isPoisonBubbleAnimating = true;
+        this.resetAnimation();
+    }
+
+    /**
+     * Resets the animation state to its initial values.
+     * Sets the animation as not finished and resets the current image index to 0.
+     */
+    resetAnimation() {
+        this.animationFinished = false;
+        this.currentImage = 0;
+    }
+
+    /**
+     * Animates the shark's poisoned bubble attack and shoots a poisoned bubble when the animation is complete.
+     *
+     * This function plays the poisoned bubble animation using `playAnimationOnce`. Once the animation
+     * finishes, it spawns a poisoned bubble by calling `shootBubble`, decreases the `poisonCount`,
+     * updates the poison bar via `world.poisonBar.setBarProgress`, and resets relevant flags
+     * (`isPoisonBubbleAnimating`, `animationFinished`) and the `restCounter`.
+     */
+    sharkPoisonBubble() {
+        this.playAnimationOnce(this.IMAGES_POISONBUBBLES);
+        if (this.animationFinished) {
+            this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Poisoned Bubble (for whale).png');
+            this.poisonCount--;
+            this.world.poisonBar.setBarProgress(this.poisonCount);
+            this.isPoisonBubbleAnimating = false;
+            this.animationFinished = false;
+            this.restCounter = 0;
+        }
+    }
+
+    /**
+     * Animates the shark's bubble attack and shoots a bubble when the animation is complete.
+     *
+     * This function plays the bubble animation using `playAnimationOnce`. Once the animation
+     * finishes, it spawns a bubble by calling `shootBubble`, plays the bubble sound, and resets
+     * the relevant flags (`isBubbleAnimating`, `animationFinished`) and the `restCounter`.
+     */
+    sharkBubble() {
+        this.playAnimationOnce(this.IMAGES_BUBBLES);
+        if (this.animationFinished) {
+            this.shootBubble('img/1.Sharkie/4.Attack/Bubble trap/Bubble.png');
+            this.world.sound.play('bubble');
+            this.isBubbleAnimating = false;
+            this.animationFinished = false;
+            this.restCounter = 0;
+        }
+    }
+
+    /**
+     * Handles the movement logic for the shark character based on keyboard input.
+     * Updates the shark's position (`x`, `y`), direction (`otherDirection`), and rotation.
+     * Also updates the camera position relative to the shark.
+     * Movement is paused if `world.isPaused` is true.
+     * 
+     * - Moves right if the RIGHT key is pressed and within bounds.
+     * - Moves left if the LEFT key is pressed and within bounds.
+     * - Moves up if the UP key is pressed and within bounds, applying upward rotation.
+     * - Moves down if the DOWN key is pressed and within bounds, applying downward rotation.
+     * - Resets rotation if neither UP nor DOWN is pressed.
+     * - Continuously updates at 60 frames per second.
+     *
+     * @method
+     * @memberof Shark
+     */
+    sharkMovement() {
+        setInterval(() => {
+            if (this.world.isPaused) return;
+            if (this.world.keyboard.RIGHT && this.x < 3700) {
+                this.x += this.speed;
+                this.otherDirection = false;
+            }
+            if (this.world.keyboard.LEFT && this.x > 100) {
+                this.x -= this.speed;
+                this.otherDirection = true;
+            }
+            if (this.world.keyboard.UP && this.y > -100) {
+                this.y -= this.speed;
+                this.rotation = -0.25;
+            }
+            if (this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height) {
+                this.y += this.speed;
+                this.rotation = 0.25;
+            }
+            if (!this.world.keyboard.UP && !this.world.keyboard.DOWN) this.rotation = 0;
+            this.world.camera_x = -this.x + 100;
+        }, 1000 / 60);
+    }
+
+    /**
+     * Creates and shoots a bubble from the shark's position.
+     * The bubble direction depends on whether the shark is facing the opposite direction.
+     * 
+     * @param {string} bubbleImg - The image source for the bubble
+     * @returns {void}
+     */
     shootBubble(bubbleImg) {
         let bubble;
         if (!this.otherDirection){
@@ -295,10 +305,6 @@ class Shark extends MovableObject {
         bubble = new Bubble(this.x - 40 , this.y + 50, this.otherDirection, bubbleImg);
         }        
         this.world.bubbles.push(bubble);        
-    }
-        
-    jump() {
-    
     }
 }
     

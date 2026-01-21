@@ -19,6 +19,11 @@ class CoinBar extends DrawableObject {
         this.setBarProgress(this.coinCount);
     }
 
+    /**
+     * Updates the coin counter bar image based on the current counter value.
+     * 
+     * @param {number} counter - The current number of collected coins, used to select the appropriate image.
+     */
     setBarProgress(counter) {
         this.img = this.imageCache[this.IMAGES_COINS[counter]];
     }
