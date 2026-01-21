@@ -26,6 +26,7 @@ class DrawableObject  {
     }
 
     draw(ctx) {
+        if (!this.img) return;
         ctx.save();
         ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
         ctx.rotate(this.rotation);

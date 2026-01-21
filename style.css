@@ -351,3 +351,39 @@ canvas {
         object-fit: contain;
     }
 }
+
+/* Rotation hint */
+
+#rotate-hint {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.rotate-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    color: black;
+    font-family: 'LuckiestGuy', sans-serif;
+    text-align: center;
+    font-size: 24px;
+}
+
+.rotate-box img {
+    width: 120px;
+    animation: rotatePhone 1.5s infinite ease-in-out;
+}
+
+@keyframes rotatePhone {
+    0%   { transform: rotate(0deg); }
+    50%  { transform: rotate(90deg); }
+    100% { transform: rotate(0deg); }
+}

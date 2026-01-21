@@ -19,6 +19,7 @@ function init() {
     world = new World(canvas, keyboard);    
     world.pause();
     setupVolumeSlider();
+    checkOrientation();
 }
 
 function setupVolumeSlider() {
@@ -190,3 +191,20 @@ window.addEventListener("touchstart", (e) => {
 window.addEventListener("touchend", () => {
     keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = false;
 });
+
+function checkOrientation() {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isPortrait = window.innerHeight > window.innerWidth;
+
+    const rotateHint = document.getElementById("rotate-hint");
+
+    if (isMobile && isPortrait) {
+        rotateHint.style.display = "flex";
+        if (world) world.pause();
+    } else {
+        rotateHint.style.display = "none";
+    }
+}
+
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
