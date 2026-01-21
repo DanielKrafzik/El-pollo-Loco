@@ -220,6 +220,10 @@ canvas {
     cursor: pointer;
 }
 
+.mobile-d {
+    display: none;
+}
+
 /* Game Description*/
 
 #start-content,
@@ -352,7 +356,8 @@ canvas {
         object-fit: contain;
     }
 
-    #start-screen h1 {
+    #start-screen h1,
+    #controls-screen h2 {
         font-size: 24px;
     }
 
@@ -371,6 +376,77 @@ canvas {
 
     #fullscreen-btn {
         display: none;
+    }
+
+    .mobile-none {
+        display: none;
+    }
+
+    .mobile-d {
+        display: flex;
+    }
+
+    p {
+        display: flex;
+    }
+
+    #controls-screen p {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    #controls-screen img {
+        width: 25%;
+    }
+
+    #close-controls-btn{
+        position: absolute;
+        top: 5%;
+        right: 10%;
+        width: 125px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    #start-content,
+    #legal-notice{
+        padding: 0;
+    }
+
+    #start-content h1,
+    #legal-notice h1 {
+        font-size: 24px;
+    }
+
+    #start-content h2,
+    #legal-notice h2 {
+        font-size: 20px;
+    }
+
+    #start-content p,
+    #legal-notice p,
+    #legal-notice ul {
+        font-size: 16px;
+        margin-right: 50px;
+        margin-left: 50px;
+    }
+
+    #start-content button,
+    #legal-notice button {
+        margin-bottom: 25px;
+    }
+
+    #endscreen h1 {
+        font-size: 24px;
+    }
+
+    #endscreen p {
+        font-size: 18px;
+    }
+
+    #endscreen button {
+        width: 125px;
+        font-size: 20px;
     }
 }
 
@@ -408,4 +484,60 @@ canvas {
     0%   { transform: rotate(0deg); }
     50%  { transform: rotate(90deg); }
     100% { transform: rotate(0deg); }
+}
+
+/* mobile controlls */
+
+#mobile-controls {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 20;
+}
+
+#mobile-controls .row {
+    display: flex;
+    gap: 15px;
+}
+
+#mobile-controls .btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+#mobile-controls .action {
+    background: rgba(0, 150, 255, 0.7);
+}
+
+#mobile-controls button {
+    touch-action: none;
+}
+
+#mobile-movement {
+    position: absolute;
+    bottom: 2%;
+    left: 10%;
+}
+
+#mobile-actions {
+    position: absolute;
+    bottom: 2%;
+    right: 10%;
+}
+
+#up-div,
+#down-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

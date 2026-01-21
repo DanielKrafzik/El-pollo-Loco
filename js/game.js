@@ -10,6 +10,9 @@ document.getElementById("play-btn").addEventListener("click", (e) => {
     }
     musicCondition = false;
     document.getElementById("start-screen").style.display = "none";
+    if (isMobile()) {
+        document.getElementById("mobile-controls").style.display = "flex";
+    }
     world.resume();
     world.sound.play('gameMusic');
 });
@@ -151,14 +154,12 @@ document.getElementById("menu-btn").addEventListener("click", () => {
 
 window.addEventListener("load", () => {
     if (sessionStorage.getItem("skipStart") === "true") {
+        if (isMobile()) {
+            document.getElementById("mobile-controls").style.display = "flex";
+        }
         document.getElementById("start-screen").style.display = "none";
         sessionStorage.removeItem("skipStart");
         init();
-        if (isMobile()) {
-            world.resize(window.innerWidth, window.innerHeight);
-        } else {
-            world.resize(960, 540);
-        }
         world.resume();
         world.sound.stop('startMusic');
         world.sound.play('gameMusic');
@@ -207,3 +208,34 @@ function checkOrientation() {
 
 window.addEventListener("resize", checkOrientation);
 window.addEventListener("orientationchange", checkOrientation);
+
+function isMobile() {
+    return window.matchMedia("(pointer: coarse)").matches;
+}
+
+function bindMobileButton(id, key) {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+
+    btn.addEventListener("touchstart", e => {
+        e.preventDefault();
+        keyboard[key] = true;
+    });
+
+    btn.addEventListener("touchend", e => {
+        e.preventDefault();
+        keyboard[key] = false;
+    });
+
+    btn.addEventListener("touchcancel", () => {
+        keyboard[key] = false;
+    });
+}
+
+bindMobileButton("btn-left", "LEFT");
+bindMobileButton("btn-right", "RIGHT");
+bindMobileButton("btn-up", "UP");
+bindMobileButton("btn-down", "DOWN");
+
+bindMobileButton("btn-attack", "D");
+bindMobileButton("btn-poison", "SPACE");

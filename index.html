@@ -31,6 +31,25 @@
     <div id="game-wrapper">
         <canvas id="canvas" width="960" height="540"></canvas>
 
+        <div id="mobile-controls">
+            <div id="mobile-movement">
+                <div id="up-div" class="row">
+                    <button class="btn" id="btn-up">▲</button>
+                </div>
+                <div class="row">
+                    <button class="btn" id="btn-left">◀</button>
+                    <button class="btn" id="btn-right">▶</button>
+                </div>
+                <div id="down-div" class="row">
+                    <button class="btn" id="btn-down">▼</button>
+                </div>
+            </div>
+            <div id="mobile-actions" class="row">
+                <button class="btn action" id="btn-attack">🫧</button>
+                <button class="btn action" id="btn-poison">☠</button>
+            </div>
+        </div>
+
         <div id="ui-overlay">
             <button id="pause-btn"><img id="pause-btn-img" src="./assets/play-buttton.png" alt=""></button>
             <button id="sound-btn"><img id="sound-btn-img" src="./assets/volume-up.png" alt=""></button>
@@ -56,12 +75,12 @@
                 <img src="./img/6.Botones/Key/arrow keys.png" alt="">
             </div>
             <div>
-                <p>Shoot normal Bubbles:</p>
-                <img src="./img/6.Botones/Key/D key.png" alt="">
+                <p><span>Shoot normal Bubbles: </span><span class="mobile-d">🫧</span></p>
+                <img class="mobile-none" src="./img/6.Botones/Key/D key.png" alt="">
             </div>
             <div>
-                <p>Shoot poison Bubbles:</p>
-                <img src="./img/6.Botones/Key/Space Bar key.png" alt="">
+                <p>Shoot poison Bubbles: <span class="mobile-d">☠</span></p>
+                <img class="mobile-none" src="./img/6.Botones/Key/Space Bar key.png" alt="">
             </div>
             <button id="close-controls-btn" class="start-btn">Back</button>
         </div>

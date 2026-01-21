@@ -207,6 +207,7 @@ class World {
                     document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
                     clearInterval(this.endscreenInterval);
                 }    
+                document.getElementById("mobile-controls").style.display = "none";
                 this.playendcondtionSound();     
                 world.pause();       
             }
