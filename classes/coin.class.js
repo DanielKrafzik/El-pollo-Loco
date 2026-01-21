@@ -27,7 +27,7 @@ class Coin extends DrawableObject {
      */
     animate() {
         setInterval(() => {
-            if (!this.world ||this.world.isPaused) return;
+            if (!this.world || this.world.isPaused) return;
             let i = this.currentImage % this.coinsSizes.length;
             let path = this.coinsSizes[i];
             this.img = this.imageCache[path];
