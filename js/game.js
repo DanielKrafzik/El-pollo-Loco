@@ -193,12 +193,11 @@ window.addEventListener("touchend", () => {
 });
 
 function checkOrientation() {
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isPortrait = window.innerHeight > window.innerWidth;
 
     const rotateHint = document.getElementById("rotate-hint");
 
-    if (isMobile && isPortrait) {
+    if (isPortrait) {
         rotateHint.style.display = "flex";
         if (world) world.pause();
     } else {
