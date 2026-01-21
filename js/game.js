@@ -203,7 +203,7 @@ if (sessionStorage.getItem("skipStart") === "true") {
  * @returns {boolean} True if the viewport width is less than 900px or height is less than 600px, false otherwise.
  */
 function isMobile() {
-    return window.innerWidth < 900 || window.innerHeight < 600;
+    return window.innerWidth < 1368 && window.innerHeight < 1025;
 }
 
 /**

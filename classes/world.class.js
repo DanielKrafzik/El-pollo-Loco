@@ -83,7 +83,11 @@ class World {
                         this.sound.play('bubbleHit');
                         if(!enemy.endboss){
                             this.bubbles.splice(bIndex, 1);
-                            enemy.energy -= 20;
+                            if (bubble.poisonous) {
+                                enemy.energy -= 40;
+                            } else {
+                                enemy.energy -= 20;
+                            }
                             if(enemy.energy <= 0) {
                                 if(enemy.img.currentSrc.includes('Puffer')) {
                                     clearInterval(enemy.moveLeftInterval);
@@ -200,17 +204,17 @@ class World {
 
     checkWinningCondition() {
         this.endscreenInterval = setInterval(() => {
-            if (this.level.enemies[14] && this.level.enemies[14].energy <= 0 || this.shark.energy <= 0) {
-                document.getElementById("endscreen").style.display = "flex";
-                if(this.shark.energy <= 0) {
-                    document.getElementById("endscreen-title").innerText = "Game Over!";
-                    document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
-                    clearInterval(this.endscreenInterval);
-                }    
-                document.getElementById("mobile-controls").style.display = "none";
-                this.playendcondtionSound();     
-                world.pause();       
-            }
+                if (this.level.enemies[14] && this.level.enemies[14].energy <= 0 || this.shark.energy <= 0) {
+                    document.getElementById("endscreen").style.display = "flex";
+                    if(this.shark.energy <= 0) {
+                        document.getElementById("endscreen-title").innerText = "Game Over!";
+                        document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
+                        clearInterval(this.endscreenInterval);
+                    }    
+                    document.getElementById("mobile-controls").style.display = "none";
+                    this.playendcondtionSound();     
+                    world.pause();       
+                }
         }, 1000);
     }
 

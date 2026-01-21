@@ -240,6 +240,11 @@ canvas {
     display: none;
 }
 
+#d-key-img {
+    width: 30% !important; 
+    margin-right: 5%;
+}
+
 /* Game Description*/
 
 #start-content,
