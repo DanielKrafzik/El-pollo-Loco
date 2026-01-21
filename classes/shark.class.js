@@ -162,29 +162,54 @@ class Shark extends MovableObject {
             if (this.world.isPaused) return;
             this.restCounter++;
             if (this.isBubbleAnimating || this.isPoisonBubbleAnimating) return;
-            if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-                return;
-            }
-            if (this.world.hitTimePassed(this)) {
-                this.playAnimation(this.IMAGES_HURT);
-                return;
-            }
-            if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
-                this.playAnimation(this.IMAGES_SWIMMING);
-                this.restCounter = 0;
-                return;
-            }
-            if (this.restCounter > 50) {
-                this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
-                return;
-            }
+            if(this.sharkDamageAction()) return;
+            if(this.sharkMovementAction()) return;
             this.playAnimation(this.IMAGES_WAITING);
             if (this.world.keyboard.D && !this.isBubbleAnimating) this.startBubble();
             if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) this.startPoisonBubble();
         }, 250);
     }
 
+    /**
+     * Handles the Shark's movement and rest animations based on keyboard input and rest counter.
+     *
+     * - If any of the movement keys (RIGHT, LEFT, UP, DOWN) are pressed, the Shark plays the swimming animation 
+     *   and resets the rest counter.
+     * - If the rest counter exceeds 50 and no movement keys are pressed, the Shark plays the resting animation 
+     *   followed by the sleeping animation loop.
+     *
+     * @returns {boolean} Returns `true` if an animation was played (either swimming or resting/sleeping), otherwise `undefined`.
+     */
+    sharkMovementAction() {
+        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
+            this.playAnimation(this.IMAGES_SWIMMING);
+            this.restCounter = 0;
+            return true;
+        }
+        if (this.restCounter > 50) {
+            this.playAnimationOnce(this.IMAGES_RESTING, this.IMAGES_SLEEPING);
+            return true;
+        }
+    }
+
+    /**
+     * Handles the Shark's damage-related animations.
+     *
+     * - If the Shark is dead (`isDead()` returns true), it plays the death animation.
+     * - If the Shark was recently hit (`world.hitTimePassed(this)` returns true), it plays the hurt animation.
+     *
+     * @returns {boolean} Returns `true` if a damage animation (dead or hurt) was played, otherwise `undefined`.
+     */
+    sharkDamageAction() {
+        if (this.isDead()) {
+            this.playAnimation(this.IMAGES_DEAD);
+            return true;
+        }
+        if (this.world.hitTimePassed(this)) {
+            this.playAnimation(this.IMAGES_HURT);
+            return true;
+        } 
+    }
     /**
      * Initiates the bubble animation for the shark.
      * Sets the animation state to active and resets the animation sequence.
@@ -267,27 +292,50 @@ class Shark extends MovableObject {
      * @memberof Shark
      */
     sharkMovement() {
-        setInterval(() => {
+        this.sharkMovementInterval = setInterval(() => {
             if (this.world.isPaused) return;
-            if (this.world.keyboard.RIGHT && this.x < 3700) {
-                this.x += this.speed;
-                this.otherDirection = false;
-            }
-            if (this.world.keyboard.LEFT && this.x > 100) {
-                this.x -= this.speed;
-                this.otherDirection = true;
-            }
-            if (this.world.keyboard.UP && this.y > -100) {
-                this.y -= this.speed;
-                this.rotation = -0.25;
-            }
-            if (this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height) {
-                this.y += this.speed;
-                this.rotation = 0.25;
-            }
+            this.sharkSideMovement();         
+            this.sharkVerticalMovement();               
             if (!this.world.keyboard.UP && !this.world.keyboard.DOWN) this.rotation = 0;
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
+    }
+
+    /**
+     * Handles the Shark's vertical movement based on keyboard input.
+     *
+     * - Moves the Shark upward if the UP key is pressed and the Shark hasn't reached the top boundary (y > -100).
+     *   Also tilts the Shark slightly upwards by setting `rotation` to -0.25.
+     * - Moves the Shark downward if the DOWN key is pressed and the Shark hasn't reached the bottom boundary
+     *   (y < canvas height - Shark height). Also tilts the Shark slightly downwards by setting `rotation` to 0.25.
+     */
+    sharkVerticalMovement() {
+        if (this.world.keyboard.UP && this.y > -100) {
+            this.y -= this.speed;
+            this.rotation = -0.25;
+        }
+        if (this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height) {
+            this.y += this.speed;
+            this.rotation = 0.25;
+        }
+    }
+
+    /**
+     * Handles the Shark's horizontal (side-to-side) movement based on keyboard input.
+     *
+     * - Moves the Shark to the right if the RIGHT key is pressed and the Shark hasn't reached the right boundary (x < 3700).
+     * - Moves the Shark to the left if the LEFT key is pressed and the Shark hasn't reached the left boundary (x > 100).
+     * - Updates the `otherDirection` property to track the current facing direction.
+     */
+    sharkSideMovement() {
+        if (this.world.keyboard.RIGHT && this.x < 3700) {
+            this.x += this.speed;
+            this.otherDirection = false;
+        }
+        if (this.world.keyboard.LEFT && this.x > 100) {
+            this.x -= this.speed;
+            this.otherDirection = true;
+        }
     }
 
     /**

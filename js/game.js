@@ -3,6 +3,18 @@ let world;
 let musicCondition = true;
 let keyboard = new Keyboard();
 
+/**
+ * Handles the click event on the Play button to start the game.
+ *
+ * - Prevents the click event from propagating to avoid triggering other listeners.
+ * - Attempts to lock the screen orientation to landscape mode on supported devices.
+ * - Disables the initial music condition flag to prevent replaying start music.
+ * - Hides the start screen UI.
+ * - Displays mobile control buttons if the device is detected as mobile.
+ * - Resumes the game world and starts playing the game background music.
+ *
+ * This listener initializes the active gameplay state when the user presses "Play".
+ */
 document.getElementById("play-btn").addEventListener("click", (e) => {
     e.stopPropagation();
     if (screen.orientation && screen.orientation.lock) {
@@ -53,48 +65,66 @@ function setupVolumeSlider() {
     });
 }
 
+/**
+ * Handles key release events to reset keyboard input states.
+ *
+ * This event listener listens for `keydown` events and sets the corresponding
+ * properties on the global `keyboard` object to `false` when a key is pressed down.
+ * This ensures that movement and action inputs stop when the user releases
+ * the respective key.
+ *
+ * Key mappings:
+ * - Right Arrow (39): keyboard.RIGHT
+ * - Left Arrow (37): keyboard.LEFT
+ * - Up Arrow (38): keyboard.UP
+ * - Down Arrow (40): keyboard.DOWN
+ * - Space (32): keyboard.SPACE
+ * - D key (68): keyboard.D
+ */
 window.addEventListener('keydown', (event) => {
-    if(event.keyCode == 39){
-        keyboard.RIGHT = true;
-    }
-    if(event.keyCode == 37){
-        keyboard.LEFT = true;
-    }
-    if(event.keyCode == 38){
-        keyboard.UP = true;
-    }
-    if(event.keyCode == 40){
-        keyboard.DOWN = true;
-    }
-    if(event.keyCode == 32){
-        keyboard.SPACE = true;
-    }
-    if(event.keyCode == 68){
-        keyboard.D = true;        
-    }
+    if(event.keyCode == 39) keyboard.RIGHT = true;
+    if(event.keyCode == 37) keyboard.LEFT = true;
+    if(event.keyCode == 38) keyboard.UP = true;
+    if(event.keyCode == 40) keyboard.DOWN = true;
+    if(event.keyCode == 32) keyboard.SPACE = true;
+    if(event.keyCode == 68) keyboard.D = true;
 });
 
+/**
+ * Handles key release events to reset keyboard input states.
+ *
+ * This event listener listens for `keyup` events and sets the corresponding
+ * properties on the global `keyboard` object to `false` when a key is released.
+ * This ensures that movement and action inputs stop when the user releases
+ * the respective key.
+ *
+ * Key mappings:
+ * - Right Arrow (39): keyboard.RIGHT
+ * - Left Arrow (37): keyboard.LEFT
+ * - Up Arrow (38): keyboard.UP
+ * - Down Arrow (40): keyboard.DOWN
+ * - Space (32): keyboard.SPACE
+ * - D key (68): keyboard.D
+ */
 window.addEventListener('keyup', (event) => {
-    if(event.keyCode == 39){
-        keyboard.RIGHT = false;
-    }
-    if(event.keyCode == 37){
-        keyboard.LEFT = false;
-    }
-    if(event.keyCode == 38){
-        keyboard.UP = false;
-    }
-    if(event.keyCode == 40){
-        keyboard.DOWN = false;
-    }
-    if(event.keyCode == 32){
-        keyboard.SPACE = false;
-    }
-    if(event.keyCode == 68){
-        keyboard.D = false;
-    }
+    if(event.keyCode == 39) keyboard.RIGHT = false;
+    if(event.keyCode == 37) keyboard.LEFT = false;
+    if(event.keyCode == 38) keyboard.UP = false;    
+    if(event.keyCode == 40) keyboard.DOWN = false;    
+    if(event.keyCode == 32) keyboard.SPACE = false;    
+    if(event.keyCode == 68) keyboard.D = false;    
 });
 
+/**
+ * Toggles fullscreen mode for the game wrapper element.
+ *
+ * - If the document is not currently in fullscreen mode, the element with
+ *   the ID "game-wrapper" is requested to enter fullscreen.
+ * - If the document is already in fullscreen mode, fullscreen is exited.
+ *
+ * This allows the user to switch between fullscreen and windowed mode
+ * via the fullscreen button.
+ */
 document.getElementById("fullscreen-btn").addEventListener("click", () => {
     const wrapper = document.getElementById("game-wrapper");
 
@@ -105,6 +135,16 @@ document.getElementById("fullscreen-btn").addEventListener("click", () => {
     }
 });
 
+/**
+ * Handles changes to the browser's fullscreen state.
+ *
+ * - When entering fullscreen mode, the game world is resized to match
+ *   the current window dimensions.
+ * - When exiting fullscreen mode, the game world is resized back to
+ *   its default resolution (960x540).
+ *
+ * The handler safely exits if the global `world` object is not yet initialized.
+ */
 document.addEventListener("fullscreenchange", () => {
     if (!world) return;
 
@@ -147,6 +187,18 @@ document.getElementById("impressum-btn").addEventListener("click", () => {
     document.getElementById("impressum").style.display = "flex";
 });
 
+/**
+ * Handles the pause button click event.
+ *
+ * - Toggles the game pause state by calling `world.togglePause()`.
+ * - Updates the pause button icon to reflect the current state:
+ *   - Shows the pause icon when the game is running.
+ *   - Shows the play icon when the game is paused.
+ *
+ * Assumes an image element with the ID `pause-btn-img` exists and that
+ * its `src` attribute contains either "play" or "pause" to determine
+ * the current state.
+ */
 document.getElementById("pause-btn").addEventListener("click", () => {
     world.togglePause();
     if (document.getElementById("pause-btn-img").src.includes("play")) {
@@ -156,6 +208,17 @@ document.getElementById("pause-btn").addEventListener("click", () => {
     }   
 });
 
+/**
+ * Handles the sound button click event.
+ *
+ * - Toggles the global sound mute state via `world.sound.toggleMute()`.
+ * - Updates the sound button icon to reflect the current sound state
+ *   (volume on or muted).
+ *
+ * Assumes an image element with the ID `sound-btn-img` exists and that
+ * its `src` attribute contains either "volume-up" or "mute" to determine
+ * the current state.
+ */
 document.getElementById("sound-btn").addEventListener("click", () => {
     world.sound.toggleMute();
     if (document.getElementById("sound-btn-img").src.includes("volume-up")) {
@@ -165,17 +228,48 @@ document.getElementById("sound-btn").addEventListener("click", () => {
     }
 });
 
+/**
+ * Handles the restart button click event.
+ *
+ * - Stores a flag in sessionStorage to skip the start screen after reload.
+ * - Reloads the current page to restart the game immediately.
+ *
+ * The `skipStart` flag is read on page load to resume the game directly
+ * without showing the start menu.
+ */
 document.getElementById("restart-btn").addEventListener("click", () => {
     sessionStorage.setItem("skipStart", "true");
     location.reload();
 });
 
+/**
+ * Handles the menu button click event.
+ *
+ * - Reloads the current page to return to the main menu/start screen.
+ * - Stops the in-game background music.
+ * - Starts playing the start screen music.
+ *
+ * Note: Since `location.reload()` is called, subsequent code execution
+ * may be interrupted depending on the browser timing.
+ */
 document.getElementById("menu-btn").addEventListener("click", () => {
     location.reload();
     world.sound.stop('gameMusic');
     world.sound.play('startMusic');
 });
 
+/**
+ * Handles automatic game startup after a page reload when the start screen
+ * should be skipped.
+ *
+ * - Listens for the window "load" event to ensure all resources are available.
+ * - Checks the session storage flag "skipStart" to determine whether the game
+ *   should start immediately.
+ * - Displays mobile controls if the device is detected as mobile.
+ * - Hides the start screen and initializes the game world.
+ * - Resumes the game, stops the start screen music, and starts the game music.
+ * - Removes the "skipStart" flag from session storage after use.
+ */
 window.addEventListener("load", () => {
     if (sessionStorage.getItem("skipStart") === "true") {
         if (isMobile()) {
@@ -190,6 +284,19 @@ window.addEventListener("load", () => {
     }
 });
 
+/**
+ * Plays the start screen background music on the first user interaction.
+ *
+ * - Listens for the first click event on the document to comply with browser
+ *   autoplay restrictions for audio.
+ * - Starts the "startMusic" sound only if `musicCondition` is true and the
+ *   `world.sound` object is available.
+ * - The listener is executed only once and then automatically removed.
+ *
+ * Additionally:
+ * - If the session storage flag "skipStart" is set to true, `musicCondition`
+ *   is disabled to prevent the start music from playing automatically after a reload.
+ */
 document.addEventListener("click", () => {
     if (musicCondition && world.sound) world.sound.play('startMusic'); 
 }, { once: true });
