@@ -569,6 +569,7 @@ canvas {
 
 #mobile-controls button {
     touch-action: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #mobile-movement {

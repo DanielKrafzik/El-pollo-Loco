@@ -206,21 +206,6 @@ function isMobile() {
     return window.innerWidth < 900 || window.innerHeight < 600;
 }
 
-window.addEventListener("touchstart", (e) => {
-    const x = e.touches[0].clientX;
-    const y = e.touches[0].clientY;
-
-    if (x < window.innerWidth / 2) keyboard.LEFT = true;
-    else keyboard.RIGHT = true;
-
-    if (y < window.innerHeight / 2) keyboard.UP = true;
-    else keyboard.DOWN = true;
-});
-
-window.addEventListener("touchend", () => {
-    keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = false;
-});
-
 /**
  * Checks the current device orientation and displays a rotation hint if the device is in portrait mode.
  * Pauses the game world if a global `world` object exists.
