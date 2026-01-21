@@ -112,7 +112,6 @@ class Shark extends MovableObject {
     constructor() {
         super().loadImage('img/1.Sharkie/1.IDLE/1.png');
         this.loadImages(this.IMAGES_WAITING);   
-        this.imageCache = {};   
         this.loadImages(this.IMAGES_RESTING);
         this.loadImages(this.IMAGES_SLEEPING);
         this.loadImages(this.IMAGES_SWIMMING);      

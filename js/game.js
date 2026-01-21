@@ -191,7 +191,7 @@ window.addEventListener("load", () => {
 });
 
 document.addEventListener("click", () => {
-    if (musicCondition) world.sound.play('startMusic'); 
+    if (musicCondition && world.sound) world.sound.play('startMusic'); 
 }, { once: true });
 
 if (sessionStorage.getItem("skipStart") === "true") {
