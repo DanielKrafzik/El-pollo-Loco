@@ -28,25 +28,25 @@ class Enemies extends MovableObject {
         'img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/3.swim5.png'
     ];
     IMAGES_TRANSITION_PUFFER = [
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/1.transition1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/1.transition2.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/1.transition3.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/1.transition4.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/1.transition5.png'
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition1.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition4.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/1.transition5.png'
     ];
     IMAGES_TRANSITION_PUFFER2 = [
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/2.transition1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/2.transition2.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/2.transition3.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/2.transition4.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/2.transition5.png'
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition1.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition4.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/2.transition5.png'
     ];
     IMAGES_TRANSITION_PUFFER3 = [
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/3.transition1.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/3.transition2.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/3.transition3.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/3.transition4.png',
-        'img/2.Enemy/1.Puffer fish (3 color options)/2.Transition/3.transition5.png'
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition1.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition2.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition3.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition4.png',
+        'img/2.Enemy/1.Puffer fish (3 color options)/2.transition/3.transition5.png'
     ];
     IMAGES_BUBBLESWIM_PUFFER = [
         'img/2.Enemy/1.Puffer fish (3 color options)/3.Bubbleeswim/1.bubbleswim1.png',
