@@ -1,6 +1,6 @@
 import { Shark } from "./shark.class.js";
 import { Level } from "./level.class.js";
-import { level1 } from "../levels/level1.js";
+import { createLevel1 } from "../levels/level1.js";
 import { Statusbar } from "./status-bar.class.js";
 import { CoinBar } from "./coin-counter.class.js";
 import { PoisonBar } from "./poison-counter.class.js";
@@ -9,7 +9,7 @@ import { SoundManager } from "./sound-manager.class.js";
 
 export class World {
     shark = new Shark();
-    level = level1;
+    level = createLevel1();
     canvas;
     sound;
     ctx;
@@ -323,7 +323,7 @@ export class World {
      */
     barDrawings() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.translate(this.camera_x, 0);        
+        this.ctx.translate(this.camera_x, 0);       
         this.addObjectsToMap(this.level.backgroundObjects);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
@@ -494,5 +494,53 @@ export class World {
             this.sound.play('gameWon');
         }
     }    
+
+    /**
+     * Resets the game world to its initial state.
+     *
+     * - Clears active intervals for collisions and the endscreen.
+     * - Resets game-specific variables to their default values.
+     * - Re-initializes collision and winning condition checks.
+     * - Reconnects all game objects (enemies, collectibles, shark, etc.) to the world.
+     * - Redraws the game world to reflect the reset state.
+     *
+     * This method allows the game to be restarted without reloading the page.
+     */
+    reset() {
+        clearInterval(this.collisionInterval);
+        clearInterval(this.endscreenInterval);
+        this.resetGameVariables();
+        this.checkCollisions();
+        this.checkWinningCondition();
+        this.connectWorldToObjects();
+        this.draw();
+    }
+
+    /**
+     * Resets the core game variables to their initial state.
+     *
+     * - Unpauses the game and resets the camera position.
+     * - Recreates the level and initializes a new Shark instance.
+     * - Sets the Shark's world reference to the current World instance.
+     * - Finds and sets the Endboss from the newly created level.
+     * - Hides the endscreen UI.
+     * - Resets all status bars (health, coins, poison) to their starting values.
+     *
+     * This method is intended to be called when restarting the game
+     * without reloading the page.
+     */
+    resetGameVariables() {
+        this.isPaused = false;
+        this.camera_x = 0;
+        this.level = createLevel1();
+        this.shark = new Shark();
+        this.shark.setWorld(this);
+        this.endboss = this.level.enemies.find(e => e.endboss);
+        document.getElementById("endscreen").style.display = "none";
+        this.statusBar.setPercentage(100);
+        this.coinBar.setBarProgress(0);
+        this.poisonBar.setBarProgress(0);
+    }
+
 }
     

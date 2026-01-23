@@ -263,7 +263,11 @@ document.getElementById("sound-btn").addEventListener("click", () => {
  */
 document.getElementById("restart-btn").addEventListener("click", () => {
     sessionStorage.setItem("skipStart", "true");
-    location.reload();
+    world.reset();
+    world.sound.play('gameMusic');
+    if (isMobile()) {
+            document.getElementById("mobile-controls").style.display = "flex";
+        }
 });
 
 /**
@@ -277,7 +281,10 @@ document.getElementById("restart-btn").addEventListener("click", () => {
  * may be interrupted depending on the browser timing.
  */
 document.getElementById("menu-btn").addEventListener("click", () => {
-    location.reload();
+    world.reset();    
+    document.getElementById("mobile-controls").style.display = "none";
+    document.getElementById("start-screen").style.display = "flex";
+    world.pause();
     world.sound.stop('gameMusic');
     world.sound.play('startMusic');
 });
