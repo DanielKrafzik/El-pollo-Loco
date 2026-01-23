@@ -5,11 +5,12 @@ import { Statusbar } from "./status-bar.class.js";
 import { CoinBar } from "./coin-counter.class.js";
 import { PoisonBar } from "./poison-counter.class.js";
 import { SoundManager } from "./sound-manager.class.js";
-
+import { CollisionManager } from "./collision-manager.class.js";
 
 export class World {
     shark = new Shark();
     level = createLevel1();
+    collisionmanager = new CollisionManager();
     canvas;
     sound;
     ctx;
@@ -30,18 +31,16 @@ export class World {
         this.gamekeyboard = gamekeyboard;
         this.endboss = this.level.enemies.find(enemy => enemy.endboss);
         this.draw();
-        this.checkCollisions();
         this.connectWorldToObjects();
+        this.collisionmanager.setWorld(this);
         this.checkWinningCondition();
     }
 
     /**
-     * Connects the game world to all game objects so they can interact with it.
-     *
+     * Connects the game world to all game objects so they can interact with it.     
      * - Sets the world reference for the Shark, allowing it to access world properties and methods.
      * - Iterates over all enemies in the current level and sets their world reference.
-     * - Iterates over all collectibles in the current level and sets their world reference.
-     *
+     * - Iterates over all collectibles in the current level and sets their world reference.     
      * This ensures that every game object can interact with the world, e.g., for collision detection,
      * sound effects, or accessing game state.
      */
@@ -69,229 +68,13 @@ export class World {
     }
 
     /**
-     * Starts a recurring check for all game collisions and interactions.
-     *
-     * - Runs every 100 milliseconds using `setInterval`.
-     * - Skips execution if the game is currently paused (`isPaused` is true).
-     * - Checks for collisions between the player (`shark`) and enemies.
-     * - Handles collectible pickups such as coins and poison items.
-     * - Processes bubble interactions in the game world.
-     *
-     * This function sets up the main collision detection loop for gameplay mechanics.
-     */
-    checkCollisions() {                
-        this.collisionInterval = setInterval(() => {
-            if (this.isPaused) return;
-            this.sharkColliding();
-            this.coinCollecting();
-            this.poisonCollecting();      
-            this.bubbleHandling();
-        }, 100);
-    }
-
-    /**
-     * Handles interactions between bubbles and enemies in the game world.
-     *
-     * - Iterates through all active bubbles and checks for collisions with each enemy.
-     * - Plays the 'bubbleHit' sound when a collision occurs.
-     * - For regular enemies, triggers `bubbleSplicing` to handle the collision effects.
-     * - For the endboss, triggers `poisonBubbleSplicing` instead.
-     *
-     * This method is responsible for detecting and processing all bubble-enemy interactions.
-     */
-    bubbleHandling() {
-        this.bubbles.forEach((bubble, bIndex) => {
-            this.level.enemies.forEach((enemy, eIndex) => {
-                if (bubble.isColliding(enemy)) {
-                    this.sound.play('bubbleHit');
-                    if (!enemy.endboss) {
-                        this.bubbleSplicing(bIndex, bubble, enemy, eIndex);
-                    } else if (enemy.endboss) {
-                        this.poisonBubbleSplicing(bIndex, bubble, enemy, eIndex);
-                    }
-                }
-            });
-        });
-    }
-
-    /**
-     * Handles the collision of a poisonous bubble with the endboss.
-     *
-     * - Removes the bubble from the active bubbles array.
-     * - Plays the 'bossHit' sound effect.
-     * - If the bubble is poisonous and the enemy is the endboss:
-     *   - Applies damage to the endboss by calling `hit()`.
-     *   - Updates the endboss health bar to reflect the current energy.
-     *   - Calls `bubbleIntervallHandling` to handle any additional endboss-specific effects.
-     *
-     * @param {number} bIndex - The index of the bubble in the bubbles array.
-     * @param {Object} bubble - The bubble object that collided.
-     * @param {Object} enemy - The enemy object (endboss) that was hit.
-     * @param {number} eIndex - The index of the enemy in the enemies array.
-     */
-    poisonBubbleSplicing(bIndex, bubble, enemy, eIndex) {
-        this.bubbles.splice(bIndex, 1);
-        this.sound.play('bossHit');
-        if (bubble.poisonous && enemy.endboss) {
-            enemy.hit();
-            enemy.healthbar.setHealth(enemy.energy);
-            this.bubbleIntervallHandling(enemy, eIndex);
-        }
-    }
-
-    /**
-     * Handles the aftermath of a bubble hitting an enemy, specifically for the endboss.
-     *
-     * - If the enemy's energy is 0 or less:
-     *   - Stops the endboss movement and swimming intervals.
-     *   - Reduces the endboss speed and triggers its dying animation.
-     *   - Moves the endboss upwards.
-     *   - Removes the endboss from the enemies array after 3 seconds.
-     * - If the enemy still has energy:
-     *   - Stops both the endboss swimming interval and the general move-towards-shark interval.
-     *
-     * @param {Object} enemy - The enemy object that was hit by a bubble.
-     * @param {number} eIndex - The index of the enemy in the enemies array.
-     */
-    bubbleIntervallHandling(enemy, eIndex) {
-        if (enemy.energy <= 0) {
-            clearInterval(this.moveTowardsSharkIntervall);
-            clearInterval(enemy.endbossSwimmingInterval);
-            enemy.speed = 0.5;
-            enemy.endbossDyingAnimation();
-            enemy.moveUp();
-            setTimeout(() => {
-                this.level.enemies.splice(eIndex, 1);
-            }, 3000);
-        } else if (enemy.energy > 0) {
-            clearInterval(enemy.endbossSwimmingInterval);
-            clearInterval(this.moveTowardsSharkIntervall);
-        }
-    }
-
-    /**
-     * Handles the effects of a regular bubble hitting a non-endboss enemy.
-     *
-     * - Removes the bubble from the bubbles array.
-     * - Reduces the enemy's energy based on whether the bubble is poisonous (40 if poisonous, 20 otherwise).
-     * - If the enemy's energy drops to 0 or below, triggers `poisonBubbleIntervalHandling` for further processing.
-     *
-     * @param {number} bIndex - The index of the bubble in the bubbles array.
-     * @param {Object} bubble - The bubble object that collided with the enemy.
-     * @param {Object} enemy - The enemy object that was hit by the bubble.
-     * @param {number} eIndex - The index of the enemy in the enemies array.
-     */
-    bubbleSplicing(bIndex, bubble, enemy, eIndex) {
-        this.bubbles.splice(bIndex, 1);
-        if (bubble.poisonous) enemy.energy -= 40;
-        else enemy.energy -= 20;
-        if (enemy.energy <= 0) {
-            this.poisonBubbleIntervalHandling(enemy, eIndex);
-        }
-    }
-
-    /**
-     * Handles the death sequence for an enemy after being hit by a bubble that reduces its energy to zero.
-     *
-     * - Determines the enemy type based on its image source.
-     *   - If it's a Puffer fish, stops its left movement interval and plays the dying animation.
-     *   - Otherwise, assumes it's a Jellyfish, stops its vertical movement interval and plays the jelly dying animation.
-     * - Moves the enemy upward to simulate a death movement.
-     * - Removes the enemy from the `level.enemies` array after 3 seconds.
-     *
-     * @param {Object} enemy - The enemy object that is dying.
-     * @param {number} eIndex - The index of the enemy in the `level.enemies` array.
-     */
-    poisonBubbleIntervalHandling(enemy, eIndex) {
-        if (enemy.img.currentSrc.includes('Puffer')) {
-            clearInterval(enemy.moveLeftInterval);
-            enemy.dyingPufferAnimation(enemy);
-        } else {
-            clearInterval(enemy.moveUpDownInterval);
-            enemy.animateJellyDying(enemy);
-        }
-        enemy.moveUp();
-        setTimeout(() => {
-            this.level.enemies.splice(eIndex, 1);
-        }, 3000);
-    }
-
-    /**
-     * Checks for collisions between the shark and poison items in the level.
-     *
-     * - If the shark collides with a poison item:
-     *   - Increases the shark's poison count via `collectPoison()`.
-     *   - Plays a "flask" sound effect.
-     *   - Removes the collected poison item from the level.
-     *   - Updates the poison bar to reflect the shark's current poison count.
-     */
-    poisonCollecting() {
-        this.level.poison.forEach((poison, index) => {
-            if (this.shark.isColliding(poison)) {
-                this.shark.collectPoison();
-                this.sound.play('flask');
-                this.level.poison.splice(index, 1);
-                this.poisonBar.setBarProgress(this.shark.poisonCount);
-            }
-        });
-    }
-
-    /**
-     * Checks for collisions between the shark and collectible coins in the level.
-     *
-     * - If the shark collides with a coin:
-     *   - Increases the shark's coin count via `collect()`.
-     *   - Plays a "coin" sound effect.
-     *   - Removes the collected coin from the level.
-     *   - Updates the coin bar to reflect the shark's current coin count.
-     */
-    coinCollecting() {
-        this.level.collectibles.forEach((collectible, index) => {
-            if (this.shark.isColliding(collectible)) {
-                this.shark.collect();
-                this.sound.play('coin');
-                this.level.collectibles.splice(index, 1);
-                this.coinBar.setBarProgress(this.shark.coinCount);
-            }
-        });
-    }
-
-    /**
-     * Checks for collisions between the shark and all enemies in the level.
-     *
-     * - If a collision occurs and the shark has not been hit recently:
-     *   - Reduces the shark's energy via `hit()`.
-     *   - Plays the "sharkHit" sound effect.
-     *   - Updates the status bar to reflect the shark's current energy.
-     *   - If the enemy is the endboss:
-     *     - Stops the endboss's swimming interval.
-     *     - Resets the endboss's hit counter.
-     */
-    sharkColliding() {
-        this.level.enemies.forEach(enemy => {
-            if (this.shark.isColliding(enemy) && !this.hitTimePassed(this.shark)) {
-                this.shark.hit();
-                this.sound.play('sharkHit');
-                this.statusBar.setPercentage(this.shark.energy);
-                if (enemy.endboss) {
-                    clearInterval(enemy.endbossSwimmingInterval);
-                    enemy.endbossHitCounter = 0;
-                }
-            }
-        });
-    }
-
-    /**
-     * Renders the entire game frame, including the background, objects, player, and HUD.
-     *
+     * Renders the entire game frame, including the background, objects, player, and HUD.     
      * - Calls `barDrawings()` to draw the background and all status/UI bars.
      * - Translates the canvas by `camera_x` to simulate camera movement.
      * - Draws all enemies, collectibles, poison objects, and bubbles in the game world.
      * - Draws the player character (`shark`) on top of other objects.
      * - Resets the canvas translation after drawing moving objects.
-     * - Continuously requests the next animation frame using `requestAnimationFrame` to
-     *   create a smooth game loop.
-     *
+     * - Continuously requests the next animation frame using `requestAnimationFrame` to create a smooth game loop.     
      * This function is the main rendering loop responsible for visual updates in the game.
      */
     draw() {
@@ -310,14 +93,12 @@ export class World {
     }
 
     /**
-     * Draws the game scene including background objects and all UI/status bars.
-     *
+     * Draws the game scene including background objects and all UI/status bars.     
      * - Clears the entire canvas before drawing.
      * - Translates the canvas context by `camera_x` to simulate camera movement and
      *   draws all background objects.
      * - Resets the translation and draws the player's status bar, coin bar, and poison bar.
-     * - If the endboss exists and has been triggered, also draws the endboss's health bar.
-     *
+     * - If the endboss exists and has been triggered, also draws the endboss's health bar.     
      * This method is responsible for rendering all visual elements that appear on the main
      * game screen and the heads-up display (HUD).
      */
@@ -335,12 +116,10 @@ export class World {
     }
 
     /**
-     * Adds an array of game objects to the map.
-     *
+     * Adds an array of game objects to the map.     
      * - Iterates through each object in the `objects` array.
      * - Skips objects that are `endboss` and not yet `triggered`.
-     * - Calls `addToMap` for each remaining object to render it on the map.
-     *
+     * - Calls `addToMap` for each remaining object to render it on the map.     
      * @param {Array<Object>} objects - The array of game objects to add to the map.
      */
     addObjectsToMap(objects) {
@@ -351,13 +130,11 @@ export class World {
     }
 
     /**
-     * Renders a movable object (`mo`) onto the game canvas.
-     *
+     * Renders a movable object (`mo`) onto the game canvas.     
      * - Flips the image horizontally if the object's `otherDirection` property is true.
      * - Draws the object on the canvas using its `draw` method.
      * - Optionally, `drawFrame` could be called for debugging hitboxes (currently commented out).
-     * - Resets the image flip if it was flipped before drawing.
-     *
+     * - Resets the image flip if it was flipped before drawing.     
      * @param {MovableObject} mo - The movable object to render on the canvas.
      */
     addToMap(mo) {
@@ -372,12 +149,10 @@ export class World {
     }
 
     /**
-     * Flips a movable object's image horizontally on the canvas.
-     *
+     * Flips a movable object's image horizontally on the canvas.     
      * - Saves the current canvas state.
      * - Translates and scales the canvas to mirror the object along the vertical axis.
-     * - Inverts the object's x-coordinate to match the flipped canvas.
-     *
+     * - Inverts the object's x-coordinate to match the flipped canvas.     
      * @param {MovableObject} mo - The movable object whose image should be flipped.
      */
     flipImage(mo) {
@@ -388,11 +163,9 @@ export class World {
     }
 
     /**
-     * Restores a previously flipped movable object's image to its original orientation.
-     *
+     * Restores a previously flipped movable object's image to its original orientation.     
      * - Reverts the object's x-coordinate back to its original value.
-     * - Restores the canvas state to undo the horizontal flip.
-     *
+     * - Restores the canvas state to undo the horizontal flip.     
      * @param {MovableObject} mo - The movable object whose image should be restored.
      */
     flipImageBack(mo) {
@@ -401,12 +174,10 @@ export class World {
     }
 
     /**
-     * Checks if less than 1 second has passed since the character was last hit.
-     *
+     * Checks if less than 1 second has passed since the character was last hit.     
      * - Calculates the time difference between now and the character's `lastHit` timestamp.
      * - Converts the difference from milliseconds to seconds.
-     * - Returns `true` if the character was hit less than 1 second ago, otherwise `false`.
-     *
+     * - Returns `true` if the character was hit less than 1 second ago, otherwise `false`.     
      * @param {Object} character - The character object to check.
      * @param {number} character.lastHit - The timestamp (in milliseconds) of the character's last hit.
      * @returns {boolean} True if the last hit was less than 1 second ago, false otherwise.
@@ -418,12 +189,10 @@ export class World {
     }
 
     /**
-     * Resizes the game canvas to the specified width and height.
-     *
+     * Resizes the game canvas to the specified width and height.     
      * - Updates the canvas element's `width` and `height` properties.
      * - Re-initializes the 2D rendering context (`ctx`) after resizing.
-     * - Resets the horizontal camera position (`camera_x`) to 0.
-     *
+     * - Resets the horizontal camera position (`camera_x`) to 0.     
      * @param {number} width - The new width of the canvas in pixels.
      * @param {number} height - The new height of the canvas in pixels.
      */
@@ -435,20 +204,18 @@ export class World {
     }
 
     /**
-     * Continuously checks if the game has reached a winning or losing condition.
-     *
+     * Continuously checks if the game has reached a winning or losing condition.     
      * - Monitors the endboss and the player's shark energy.
      * - If the endboss is defeated or the shark's energy drops to 0, clears relevant intervals
      *   (end screen check, collision detection, shark movement) and triggers the end screen
-     *   sequence via `endscreenTimeout()`.
-     *
+     *   sequence via `endscreenTimeout()`.     
      * This function is typically called at game start to start monitoring the game's end condition.
      */
     checkWinningCondition() {
         this.endscreenInterval = setInterval(() => {
             if (this.endboss && this.endboss.energy <= 0 || this.shark.energy <= 0) {
                 clearInterval(this.endscreenInterval);
-                clearInterval(this.collisionInterval);
+                clearInterval(this.collisionmanager.collisionInterval);
                 clearInterval(this.shark.sharkMovementInterval);
                 this.endscreenTimeout();   
             }
@@ -456,12 +223,10 @@ export class World {
     }
 
     /**
-     * Displays the end screen after a short delay to allow final animations to play.
-     *
+     * Displays the end screen after a short delay to allow final animations to play.     
      * - Waits 1.5 seconds before showing the end screen and hiding mobile controls.
      * - If the player's shark has 0 or less energy, updates the end screen title and message to indicate game over.
-     * - Plays the end condition sound and pauses the game world.
-     *
+     * - Plays the end condition sound and pauses the game world.     
      * This allows the player to see any final animations (e.g., the shark or endboss dying) before the end screen appears.
      */
     endscreenTimeout() {
@@ -478,11 +243,9 @@ export class World {
     }
 
     /**
-     * Plays the appropriate end-of-game sound based on the player's outcome.
-     *
+     * Plays the appropriate end-of-game sound based on the player's outcome.     
      * - If the player's shark has 0 or less energy, stops the game music and plays the "game over" sound.
-     * - Otherwise, stops the game music and plays the "game won" sound.
-     *
+     * - Otherwise, stops the game music and plays the "game won" sound.     
      * This function ensures the correct audio feedback is given when the game ends.
      */
     playendcondtionSound() {
@@ -496,38 +259,33 @@ export class World {
     }    
 
     /**
-     * Resets the game world to its initial state.
-     *
+     * Resets the game world to its initial state.     
      * - Clears active intervals for collisions and the endscreen.
      * - Resets game-specific variables to their default values.
      * - Re-initializes collision and winning condition checks.
      * - Reconnects all game objects (enemies, collectibles, shark, etc.) to the world.
-     * - Redraws the game world to reflect the reset state.
-     *
+     * - Redraws the game world to reflect the reset state.     
      * This method allows the game to be restarted without reloading the page.
      */
     reset() {
         clearInterval(this.collisionInterval);
         clearInterval(this.endscreenInterval);
         this.resetGameVariables();
-        this.checkCollisions();
+        this.collisionmanager.checkCollisions();
         this.checkWinningCondition();
         this.connectWorldToObjects();
         this.draw();
     }
 
     /**
-     * Resets the core game variables to their initial state.
-     *
+     * Resets the core game variables to their initial state.     
      * - Unpauses the game and resets the camera position.
      * - Recreates the level and initializes a new Shark instance.
      * - Sets the Shark's world reference to the current World instance.
      * - Finds and sets the Endboss from the newly created level.
      * - Hides the endscreen UI.
-     * - Resets all status bars (health, coins, poison) to their starting values.
-     *
-     * This method is intended to be called when restarting the game
-     * without reloading the page.
+     * - Resets all status bars (health, coins, poison) to their starting values.     
+     * This method is intended to be called when restarting the game without reloading the page.
      */
     resetGameVariables() {
         this.isPaused = false;
@@ -541,6 +299,4 @@ export class World {
         this.coinBar.setBarProgress(0);
         this.poisonBar.setBarProgress(0);
     }
-
-}
-    
+}    
