@@ -1,4 +1,6 @@
-class Endbosshealthbar extends DrawableObject {
+import { DrawableObject } from "./drawable-object.class.js";
+
+export class Endbosshealthbar extends DrawableObject {
     IMAGES = [
         'img/4. Marcadores/Purple/0_ .png',
         'img/4. Marcadores/Purple/20__1.png',

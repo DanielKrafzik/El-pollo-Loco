@@ -1,4 +1,7 @@
-class Enemies extends MovableObject {
+import { MovableObject } from "./movable-object.class.js";
+import { PUFFER_IMAGES, YELLY_IMAGES } from "../js/enemyImages.js";
+
+export class Enemies extends MovableObject {
     y = 360;
     height = 100;
     width = 100;

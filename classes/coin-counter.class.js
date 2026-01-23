@@ -1,4 +1,6 @@
-class CoinBar extends DrawableObject {
+import { DrawableObject } from "./drawable-object.class.js";
+
+export class CoinBar extends DrawableObject {
     IMAGES_COINS = [
         'img/4. Marcadores/orange/0_  copia 2.png',
         'img/4. Marcadores/orange/20_  copia.png',

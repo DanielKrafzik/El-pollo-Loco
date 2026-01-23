@@ -1,11 +1,20 @@
-class World {
+import { Shark } from "./shark.class.js";
+import { Level } from "./level.class.js";
+import { level1 } from "../levels/level1.js";
+import { Statusbar } from "./status-bar.class.js";
+import { CoinBar } from "./coin-counter.class.js";
+import { PoisonBar } from "./poison-counter.class.js";
+import { SoundManager } from "./sound-manager.class.js";
+
+
+export class World {
     shark = new Shark();
     level = level1;
     canvas;
     sound;
     ctx;
     camera_x = 0;
-    keyboard;
+    gamekeyboard;
     statusBar = new Statusbar();
     coinBar = new CoinBar();
     poisonBar = new PoisonBar();
@@ -14,11 +23,11 @@ class World {
     isPaused = false;
     endboss;
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, gamekeyboard) {
         this.sound = new SoundManager();
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
-        this.keyboard = keyboard;
+        this.gamekeyboard = gamekeyboard;
         this.endboss = this.level.enemies.find(enemy => enemy.endboss);
         this.draw();
         this.checkCollisions();
@@ -464,7 +473,7 @@ class World {
                 document.getElementById("endscreen-msg").innerText = "The Deep Guardian has defeated you. Better luck next time!";
             }
             this.playendcondtionSound();
-            world.pause();
+            this.pause();
         }, 1500);
     }
 

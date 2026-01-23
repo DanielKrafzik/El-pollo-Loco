@@ -1,4 +1,6 @@
-class Bubble extends MovableObject{
+import { MovableObject } from "./movable-object.class.js";
+
+export class Bubble extends MovableObject{
     constructor(x, y, goingLeft, bubbleImg){
         super();
         this.loadImage(bubbleImg);

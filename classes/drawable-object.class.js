@@ -1,4 +1,4 @@
-class DrawableObject  {
+export class DrawableObject  {
     img;
     imageCache = {};
     currentImage = 0;

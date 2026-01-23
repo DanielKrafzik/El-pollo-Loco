@@ -1,4 +1,11 @@
-const level1 = new Level(
+import { Level } from "../classes/level.class.js";
+import { Enemies } from "../classes/enemies.class.js";
+import { Coin } from "../classes/coin.class.js";
+import { Poison } from "../classes/poison.class.js";
+import { BackgroundObject } from "../classes/background-object.class.js";
+import { Endboss } from "../classes/endboss.class.js";
+
+export const level1 = new Level(
     [
         new Enemies('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',10,10,30,0,0),
         new Enemies('img/2.Enemy/1.Puffer fish (3 color options)/1.Swim/1.swim1.png',10,10,30,0,1),

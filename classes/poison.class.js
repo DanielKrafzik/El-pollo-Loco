@@ -1,4 +1,6 @@
-class Poison extends DrawableObject {
+import { DrawableObject } from "./drawable-object.class.js";
+
+export class Poison extends DrawableObject {
     constructor(x, y) {
         super();
         this.loadImage('img/4. Marcadores/Posión/Light - Left.png');

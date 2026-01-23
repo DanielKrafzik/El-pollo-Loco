@@ -1,4 +1,4 @@
-class Keyboard {
+export class GameKeyboard {
     RIGHT = false;
     LEFT = false;
     UP = false;

@@ -1,4 +1,7 @@
-class Shark extends MovableObject {
+import { MovableObject } from "./movable-object.class.js";
+import { Bubble } from "./bubble.class.js";
+
+export class Shark extends MovableObject {
 
     height = 200;
     width = 200;
@@ -119,8 +122,12 @@ class Shark extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_BUBBLES);
         this.loadImages(this.IMAGES_POISONBUBBLES);
-
+        this.setWorld(this.world);
         this.animate();
+    }
+
+    setWorld(world) {
+        this.world = world;
     }
 
     /**
@@ -165,8 +172,8 @@ class Shark extends MovableObject {
             if(this.sharkDamageAction()) return;
             if(this.sharkMovementAction()) return;
             this.playAnimation(this.IMAGES_WAITING);
-            if (this.world.keyboard.D && !this.isBubbleAnimating) this.startBubble();
-            if (this.world.keyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) this.startPoisonBubble();
+            if (this.world.gamekeyboard.D && !this.isBubbleAnimating) this.startBubble();
+            if (this.world.gamekeyboard.SPACE && !this.isPoisonBubbleAnimating && this.poisonCount > 0) this.startPoisonBubble();
         }, 250);
     }
 
@@ -181,7 +188,7 @@ class Shark extends MovableObject {
      * @returns {boolean} Returns `true` if an animation was played (either swimming or resting/sleeping), otherwise `undefined`.
      */
     sharkMovementAction() {
-        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT || this.world.keyboard.UP || this.world.keyboard.DOWN) {
+        if (this.world.gamekeyboard.RIGHT || this.world.gamekeyboard.LEFT || this.world.gamekeyboard.UP || this.world.gamekeyboard.DOWN) {
             this.playAnimation(this.IMAGES_SWIMMING);
             this.restCounter = 0;
             return true;
@@ -296,7 +303,7 @@ class Shark extends MovableObject {
             if (this.world.isPaused) return;
             this.sharkSideMovement();         
             this.sharkVerticalMovement();               
-            if (!this.world.keyboard.UP && !this.world.keyboard.DOWN) this.rotation = 0;
+            if (!this.world.gamekeyboard.UP && !this.world.gamekeyboard.DOWN) this.rotation = 0;
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
     }
@@ -310,11 +317,11 @@ class Shark extends MovableObject {
      *   (y < canvas height - Shark height). Also tilts the Shark slightly downwards by setting `rotation` to 0.25.
      */
     sharkVerticalMovement() {
-        if (this.world.keyboard.UP && this.y > -100) {
+        if (this.world.gamekeyboard.UP && this.y > -100) {
             this.y -= this.speed;
             this.rotation = -0.25;
         }
-        if (this.world.keyboard.DOWN && this.y < this.world.canvas.height - this.height) {
+        if (this.world.gamekeyboard.DOWN && this.y < this.world.canvas.height - this.height) {
             this.y += this.speed;
             this.rotation = 0.25;
         }
@@ -328,11 +335,11 @@ class Shark extends MovableObject {
      * - Updates the `otherDirection` property to track the current facing direction.
      */
     sharkSideMovement() {
-        if (this.world.keyboard.RIGHT && this.x < 3700) {
+        if (this.world.gamekeyboard.RIGHT && this.x < 3700) {
             this.x += this.speed;
             this.otherDirection = false;
         }
-        if (this.world.keyboard.LEFT && this.x > 100) {
+        if (this.world.gamekeyboard.LEFT && this.x > 100) {
             this.x -= this.speed;
             this.otherDirection = true;
         }

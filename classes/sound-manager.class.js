@@ -1,4 +1,4 @@
-class SoundManager {
+export class SoundManager {
     sounds = {};
     muted = false;
     volume = 1;
