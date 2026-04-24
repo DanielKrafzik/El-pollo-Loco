@@ -8,7 +8,9 @@ The project focuses on game logic, animations, and responsive gameplay mechanics
 
 ## 🌐 Live Demo
 
-👉 https://danielkrafzik.com/portfolio/sharkie
+👉 <a href="https://sharkie-dk.web.app/" target="_blank">
+  Live Demo
+</a>
 
 
 ---
